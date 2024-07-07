@@ -28,7 +28,7 @@ const LoginForm = ({ navigation }) => {
                 onChangeText={(text) => setPassword(text)}
             />
 
-            <TouchableOpacity onPress={() => navigation.navigate('pantalla_uno')}>
+            <TouchableOpacity onPress={() => navigation.navigate('home')}>
                 <Text style={styles.linkText}>Iniciar sesión</Text>
             </TouchableOpacity>
 
