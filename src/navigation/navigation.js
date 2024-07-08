@@ -14,7 +14,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 // Importamos las pantallas que utilizaremos en nuestra aplicación.
-import Productos from '../screen/pantalla_principal';
+import Productos from "../screen/pantalla_principal";
 import Categoria from '../screen/home';
 
 import { color } from "react-native-elements/dist/helpers";
@@ -34,24 +34,10 @@ function Mytabs() {
             }}>
             {/* Definimos cada pantalla en el Tab Navigator */}
             <Tab.Screen
-                name="Home"
-                component={Inicio}
-                options={{
-                    tabBarLabel: 'Inicio', // Etiqueta de la pestaña.
-                    tabBarIcon: ({ color, size }) => (
-                        <MaterialCommunityIcons name="home-variant-outline" size={24} color="black" />
-                    ),
-                    headerShown: true, // Mostrar el encabezado para esta pantalla.
-                    headerStyle: {
-                        backgroundColor: '#9368EE' // Color de fondo del encabezado.
-                    },
-                }}
-            />
-            <Tab.Screen
                 name="Productos"
                 component={Productos}
                 options={{
-                    tabBarLabel: 'Productos',
+                    tabBarLabel: 'Home',
                     tabBarIcon: ({ color, size }) => (
                         <MaterialCommunityIcons name="inbox-multiple" size={24} color="black" />
                     ),

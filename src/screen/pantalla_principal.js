@@ -1,21 +1,81 @@
 //Importaciones 
 
 import React from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import { Card } from 'react-native-elements';
+import { useEffect, useState } from 'react';
+import * as Constantes from '../utils/constantes'
 
 
 // Contenido de la página principal
 export default function Home({ navigation }) {
+
+    const [nombre, setNombre] = useState(null);
+    const ip = Constantes.IP;
+
+    const handleLogout = async () => {
+        try {
+            const response = await fetch(`${ip}/tienda/api/servicios/publico/cliente.php?action=logOut`, {
+                method: 'GET'
+            });
+
+            const data = await response.json();
+
+            if (data.status) {
+                navigation.navigate('Inicio');
+            } else {
+                console.log(data);
+                // Alert the user about the error
+                Alert.alert('Error', data.error);
+            }
+        } catch (error) {
+            Alert.alert('Error', 'Ocurrió un error al cerrar la sesión');
+        }
+    };
+
+    const getUser = async () => {
+        try {
+            const response = await fetch(`${ip}/tienda/api/servicios/publico/cliente.php?action=getUser`, {
+                method: 'GET'
+            });
+
+            const data = await response.json();
+
+            console.log(data.name.nombre_cliente)
+            if (data.status) {
+                //codigo para mostrar el correo del usuario
+                //setCorreo(data.username)
+                //codigo para mostrar el nombre del usuario
+                setNombre(data.name.nombre_cliente)
+
+            } else {
+                console.log(data);
+                // Alert the user about the error
+                Alert.alert('Error', data.error);
+            }
+        } catch (error) {
+            Alert.alert('Error', 'Ocurrió un error al cerrar la sesión');
+        }
+    };
+
+    useEffect(() => {
+        getUser();
+    }, [])
+
     return (
         <View style={styles.screen}>
             <View style={styles.header}>
                 <Image source={require('../imagenes/Logo.png')} style={styles.logo} />
                 <TextInput style={styles.searchInput} placeholder="Buscar productos..." />
                 <TouchableOpacity style={styles.cartIcon}>
-                    
+
                 </TouchableOpacity>
+
             </View>
+
+            <TouchableOpacity onPress={handleLogout}>
+                <Text style={styles.buttonText}>Añadir al Carrito</Text>
+            </TouchableOpacity>
             <ScrollView contentContainerStyle={styles.container}>
                 {[1, 2, 3, 4].map((item, index) => (
                     <Card key={index} containerStyle={styles.card}>
@@ -31,16 +91,16 @@ export default function Home({ navigation }) {
             </ScrollView>
             <View style={styles.footer}>
                 <TouchableOpacity onPress={() => { /* lógica para navegar a Home */ }}>
-                   
+
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => { /* lógica para navegar a otra pantalla */ }}>
-                    
+
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate('pantalla_principal')}>
-                    
+
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => { /* lógica para navegar a otra pantalla */ }}>
-                    
+
                 </TouchableOpacity>
             </View>
         </View>

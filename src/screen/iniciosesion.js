@@ -71,7 +71,7 @@ export default function ({ navigation }) {
         try {
             const formData = new FormData();
             formData.append('email', email);
-            formData.append('password', setPassword);
+            formData.append('password',  );
 
             const response = await fetch(`${ip}/tienda/api/servicios/publico/cliente.php?action=logIn`, {
                 method: 'POST',
@@ -81,9 +81,9 @@ export default function ({ navigation }) {
             const data = await response.json();
 
             if (data.status) {
-                setContrasenia('')
+                setPassword('')
                 setEmail('')
-                navigation.navigate('navigation');
+                navigation.navigate('Productos');
             } else {
                 console.log(data);
                 Alert.alert('Error sesión', data.error);
