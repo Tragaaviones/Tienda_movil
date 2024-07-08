@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text , StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import Input from '../components/inputs/input'
 import InputEmail from '../components/inputs/input_email'
 import * as Constantes from '../utils/constantes'
@@ -101,13 +101,13 @@ export default function ({ navigation }) {
             <Text style={styles.title}>Inicio de sesión</Text>
 
             <InputEmail
-                placeholder='Correo electrónico'
+                placeHolder={"Correo electronico"}
                 setValor={email}
                 setTextChange={setEmail}
             />
 
             <Input
-                placeholder='Contraseña'
+                placeHolder={"Contraseña"}
                 setValor={contrasenia}
                 setTextChange={setPassword}
                 contra={isContra}

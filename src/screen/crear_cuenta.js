@@ -1,53 +1,101 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
-const CreateAccountForm = ({ navigation }) => {
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { useState } from 'react';
+import * as Constantes from '../utils/constantes'
+import Constants from 'expo-constants';
+import Input from '../components/inputs/input'
+import Input_password from '../components/inputs/input_password'
+import Input_cellphone from '../components/inputs/input_cellphone';
+import Input_email from '../components/inputs/input_email';
 
-    const handleSubmit = () => {
-        console.log('Usuario:', username);
-        console.log('Correo electrónico:', email);
-        console.log('Contraseña:', password);
-        console.log('Confirmar contraseña:', confirmPassword);
-        // Implementar lógica para crear cuenta
+
+export default function CreateAccountForm({ navigation }) {
+
+    const ip = Constantes.IP;
+
+    const [nombre, setNombre] = useState('')
+    const [apellido, setApellido] = useState('')
+    const [email, setEmail] = useState('')
+    const [direccion, setDireccion] = useState('')
+    const [telefono, setTelefono] = useState('')
+    const [clave, setClave] = useState('')
+    const [confirmarClave, setConfirmarClave] = useState('')
+
+    const handleSubmit = async () => {
+        try {
+            const formData = new FormData();
+            formData.append('nombre_cliente', nombre);
+            formData.append('apellido_cliente', apellido);
+            formData.append('correo_cliente', email);
+            formData.append('direccion_cliente', direccion);
+            formData.append('telefono_cliente', telefono);
+            formData.append('contra_cliente', clave);
+            formData.append('confirmar_contra', confirmarClave);
+
+            const response = await fetch(`${ip}/tienda/api/servicios/publico/cliente.php?action=signUpMovil`, {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            if (data.status) {
+                Alert.alert('Datos Guardados correctamente');
+                navigation.navigate('Sesion');
+            } else {
+                Alert.alert('Error', data.error);
+            }
+        } catch (error) {
+            Alert.alert('Ocurrió un error al intentar crear el usuario');
+        }
     };
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Crea una cuenta</Text>
 
-            <TextInput
-                style={styles.input}
-                placeholder="Nombre de usuario"
-                onChangeText={(text) => setUsername(text)}
+            <Input
+                placeHolder='Nombre del cliente'
+                setValor={nombre}
+                setTextChange={setNombre}
             />
 
-            <TextInput
-                style={styles.input}
-                placeholder="Correo electrónico"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                onChangeText={(text) => setEmail(text)}
+            <Input
+                placeHolder='Apellido del cliente'
+                setValor={apellido}
+                setTextChange={setApellido}
             />
 
-            <TextInput
-                style={styles.input}
-                placeholder="Contraseña"
-                secureTextEntry={true}
-                onChangeText={(text) => setPassword(text)}
+            <Input_email
+                placeHolder='Correo electronico'
+                setValor={email}
+                setTextChange={setEmail}
             />
 
-            <TextInput
-                style={styles.input}
-                placeholder="Confirmar contraseña"
-                secureTextEntry={true}
-                onChangeText={(text) => setConfirmPassword(text)}
+            <Input_password
+                placeHolder='Dirección Cliente'
+                setValor={setDireccion}
+                valor={direccion}
+                setTextChange={setDireccion}
             />
 
-            <TouchableOpacity onPress={() => navigation.navigate('Inicio')}>
+            <Input_cellphone
+                telefono={telefono}
+                setTelefono={setTelefono}
+            />
+
+            <Input
+                placeHolder='Clave'
+                contra={true}
+                setValor={clave}
+                setTextChange={setClave} />
+
+            <Input
+                placeHolder='Confirmar Clave'
+                contra={true}
+                setValor={confirmarClave}
+                setTextChange={setConfirmarClave} />
+
+            <TouchableOpacity onPress={handleSubmit}>
                 <Text style={styles.linkText}>Crear cuenta</Text>
             </TouchableOpacity>
             <Text style={styles.link}>¿Ya tienes una cuenta?/</Text>
@@ -101,4 +149,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CreateAccountForm;
+

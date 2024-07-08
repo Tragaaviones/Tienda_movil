@@ -1,34 +1,91 @@
-// App.js
-import * as React from 'react';
-// import { NavigationContainer } from '@react-navigation/native';
-// import { createStackNavigator } from '@react-navigation/stack';
-// import { Button, Text, View } from 'react-native';
-// import Inicio from '../screen/iniciosesion';
-// import Recuperacion from '../screen/recuperacion_contraseña';
-// import Verificacion from '../screen/verificacion_codigo';
-// import cambiar_contraseña from '../screen/cambiar_contraseña';
-// import crear_cuenta from '../screen/crear_cuenta';
-// import home from '../screen/pantalla_principal';
+// Importamos React para poder utilizar JSX y React components.
+import React from "react";
 
-// const Stack = createStackNavigator();
+// Importamos el componente para crear un Bottom Tab Navigator de @react-navigation/bottom-tabs.
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-// function MyStack() {
-//     return (
-//         <Stack.Navigator screenOptions={{ headerShown: true }}>
-//             <Stack.Screen name="Inicio" component={Inicio} />
-//             <Stack.Screen name="Recuperacion" component={Recuperacion} />
-//             <Stack.Screen name="Verificacion" component={Verificacion} />
-//             <Stack.Screen name="cambiar_contraseña" component={cambiar_contraseña} />
-//             <Stack.Screen name="crear_cuenta" component={crear_cuenta} />
-//             <Stack.Screen name="home" component={home} />
-//         </Stack.Navigator>
-//     );
-// }
+// Importamos NavigationContainer de @react-navigation/native para envolver nuestra estructura de navegación.
+import { NavigationContainer } from '@react-navigation/native';
+
+// Importamos el componente para crear un Native Stack Navigator de @react-navigation/native-stack.
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+// Importamos los iconos de MaterialCommunityIcons de @expo/vector-icons.
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
+// Importamos las pantallas que utilizaremos en nuestra aplicación.
+import Productos from '../screen/pantalla_principal';
+import Categoria from '../screen/home';
+
+import { color } from "react-native-elements/dist/helpers";
+
+// Creamos una instancia del Bottom Tab Navigator.
+const Tab = createBottomTabNavigator();
+
+// Definimos el componente Mytabs como una función que retorna el Tab Navigator configurado.
+function Mytabs() {
+    return (
+        // Definimos el Tab Navigator con sus pantallas y opciones.
+        <Tab.Navigator
+            // Configuramos opciones globales para las pantallas del Tab Navigator.
+            screenOptions={{
+                headerShown: false, // No mostrar el encabezado por defecto.
+                tabBarActiveTintColor: 'purple', // Color de los iconos activos en la barra de navegación.
+            }}>
+            {/* Definimos cada pantalla en el Tab Navigator */}
+            <Tab.Screen
+                name="Home"
+                component={Inicio}
+                options={{
+                    tabBarLabel: 'Inicio', // Etiqueta de la pestaña.
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons name="home-variant-outline" size={24} color="black" />
+                    ),
+                    headerShown: true, // Mostrar el encabezado para esta pantalla.
+                    headerStyle: {
+                        backgroundColor: '#9368EE' // Color de fondo del encabezado.
+                    },
+                }}
+            />
+            <Tab.Screen
+                name="Productos"
+                component={Productos}
+                options={{
+                    tabBarLabel: 'Productos',
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons name="inbox-multiple" size={24} color="black" />
+                    ),
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#9368EE'
+                    },
+                }}
+            />
+            <Tab.Screen
+                name="Categorias"
+                component={Categoria}
+                options={{
+                    tabBarLabel: 'Categorias',
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons name="text-box-outline" size={24} color="black" />
+                    ),
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#9368EE'
+                    },
+                }}
+            />
+        </Tab.Navigator>
+    );
+}
+
+// Exportamos el componente Mytabs para que pueda ser utilizado en otros lugares.
+export default Mytabs;
 
 // export default function Navigation() {
 //     return (
 //         <NavigationContainer>
-//             <MyStack />
+//             <Mytabs />
 //         </NavigationContainer>
-//     );
+//     )
 // }

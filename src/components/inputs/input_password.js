@@ -10,7 +10,7 @@ export default function Input_password({placeHolder, setValor, contra, valor}) {
     placeholder={placeHolder}
     value={valor}
     onChangeText={setValor}
-    placeholderTextColor={'#FFF'}
+    placeholderTextColor={'#000000'}
     secureTextEntry={contra} 
     multiline={true}
     numberOfLines={4}
@@ -21,12 +21,15 @@ export default function Input_password({placeHolder, setValor, contra, valor}) {
 
 const styles = StyleSheet.create({
   Input: {
-    backgroundColor:'#A79277',
-    color: "#fff", fontWeight:'800',
-    width:250,
-    borderRadius:5,
+    backgroundColor:'#ffffff',
+    color: "#000000",
+    width: 300,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    marginBottom: 10,
     padding: Platform.OS === 'ios' ? 15 : 10, // Estilo de la barra de pestañas, altura diferente para iOS y Android,
-    marginVertical:10
   },
 
 });
