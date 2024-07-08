@@ -6,14 +6,14 @@ import { Card } from 'react-native-elements';
 
 
 // Contenido de la página principal
-export default function home({ navigation }) {
+export default function Home({ navigation }) {
     return (
         <View style={styles.screen}>
             <View style={styles.header}>
                 <Image source={require('../imagenes/Logo.png')} style={styles.logo} />
                 <TextInput style={styles.searchInput} placeholder="Buscar productos..." />
                 <TouchableOpacity style={styles.cartIcon}>
-                    <Icon name="shopping-cart" size={24} color="black" />
+                    
                 </TouchableOpacity>
             </View>
             <ScrollView contentContainerStyle={styles.container}>
@@ -31,16 +31,16 @@ export default function home({ navigation }) {
             </ScrollView>
             <View style={styles.footer}>
                 <TouchableOpacity onPress={() => { /* lógica para navegar a Home */ }}>
-                    <Icon name="cogs" size={24} color="black" />
+                   
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => { /* lógica para navegar a otra pantalla */ }}>
-                    <Icon name="address-book" size={24} color="black" />
+                    
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate('pantalla_principal')}>
-                    <Text style={styles.linkText}>test</Text>
+                    
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => { /* lógica para navegar a otra pantalla */ }}>
-                    <Icon name="history" size={24} color="black" />
+                    
                 </TouchableOpacity>
             </View>
         </View>
