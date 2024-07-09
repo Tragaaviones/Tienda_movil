@@ -18,10 +18,6 @@ export default function Productos() {
                 </TouchableOpacity>
 
             </View>
-
-            <TouchableOpacity >
-                <Text style={styles.buttonText}>Añadir al Carrito</Text>
-            </TouchableOpacity>
             <ScrollView contentContainerStyle={styles.container}>
                 {[1, 2, 3, 4].map((item, index) => (
                     <Card key={index} containerStyle={styles.card}>

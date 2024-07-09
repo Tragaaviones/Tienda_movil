@@ -1,12 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { View, Text , StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import Input from '../components/inputs/input'
 import InputEmail from '../components/inputs/input_email'
 import * as Constantes from '../utils/constantes'
 import { useFocusEffect } from '@react-navigation/native';
 
-export default function Inicio ({ navigation }) {
+export default function Inicio({ navigation }) {
 
     const ip = Constantes.IP;
 
@@ -71,7 +71,7 @@ export default function Inicio ({ navigation }) {
         try {
             const formData = new FormData();
             formData.append('email', email);
-            formData.append('password', contrasenia );
+            formData.append('password', contrasenia);
 
             const response = await fetch(`${ip}/tienda/api/servicios/publico/cliente.php?action=logIn`, {
                 method: 'POST',

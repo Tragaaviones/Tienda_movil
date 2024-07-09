@@ -17,6 +17,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Home from "../screen/home";
 import Productos from "../screen/pantalla_principal";
 import Carrito from '../screen/carrito';
+import Perfil from "../screen/perfil";
+
 
 import { color } from "react-native-elements/dist/helpers";
 
@@ -69,6 +71,20 @@ function Mytabs() {
                     tabBarLabel: 'Carrito',
                     tabBarIcon: ({ color, size }) => (
                         <MaterialCommunityIcons name="cart-outline" size={24} color="black" />
+                    ),
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#9368EE'
+                    },
+                }}
+            />
+            <Tab.Screen
+                name="Perfil"
+                component={Perfil}
+                options={{
+                    tabBarLabel: 'Perfil',
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons name="account-convert" size={24} color="black" />
                     ),
                     headerShown: true,
                     headerStyle: {

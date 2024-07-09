@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View } from 'react-native';
 
 
-export default function Carrito () {
+export default function Carrito() {
     return (
         <View
             style={{

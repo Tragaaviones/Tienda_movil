@@ -1,29 +1,39 @@
-
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
+// Importa componentes necesarios de react-native.
 import { useState } from 'react';
-import * as Constantes from '../utils/constantes'
+// Importa useState de react para manejar el estado.
+import * as Constantes from '../utils/constantes';
+// Importa constantes de un archivo local.
 import Constants from 'expo-constants';
-import Input from '../components/inputs/input'
-import Input_password from '../components/inputs/input_password'
+// Importa constantes de expo-constants.
+import Input from '../components/inputs/input';
+// Importa un componente Input personalizado.
+import Input_password from '../components/inputs/input_password';
+// Importa un componente Input_password personalizado.
 import Input_cellphone from '../components/inputs/input_cellphone';
+// Importa un componente Input_cellphone personalizado.
 import Input_email from '../components/inputs/input_email';
-
+// Importa un componente Input_email personalizado.
 
 export default function CreateAccountForm({ navigation }) {
-
+    // Define el componente CreateAccountForm que recibe navigation como prop.
     const ip = Constantes.IP;
+    // Obtiene la IP del archivo de constantes.
 
-    const [nombre, setNombre] = useState('')
-    const [apellido, setApellido] = useState('')
-    const [email, setEmail] = useState('')
-    const [direccion, setDireccion] = useState('')
-    const [telefono, setTelefono] = useState('')
-    const [clave, setClave] = useState('')
-    const [confirmarClave, setConfirmarClave] = useState('')
+    // Estados para almacenar los datos del formulario.
+    const [nombre, setNombre] = useState('');
+    const [apellido, setApellido] = useState('');
+    const [email, setEmail] = useState('');
+    const [direccion, setDireccion] = useState('');
+    const [telefono, setTelefono] = useState('');
+    const [clave, setClave] = useState('');
+    const [confirmarClave, setConfirmarClave] = useState('');
 
     const handleSubmit = async () => {
+        // Función para manejar el envío del formulario.
         try {
             const formData = new FormData();
+            // Crea un objeto FormData para enviar los datos.
             formData.append('nombre_cliente', nombre);
             formData.append('apellido_cliente', apellido);
             formData.append('correo_cliente', email);
@@ -32,27 +42,34 @@ export default function CreateAccountForm({ navigation }) {
             formData.append('contra_cliente', clave);
             formData.append('confirmar_contra', confirmarClave);
 
+            // Envía los datos al servidor.
             const response = await fetch(`${ip}/tienda/api/servicios/publico/cliente.php?action=signUpMovil`, {
                 method: 'POST',
                 body: formData
             });
 
             const data = await response.json();
+            // Procesa la respuesta del servidor.
             if (data.status) {
                 Alert.alert('Datos Guardados correctamente');
+                // Muestra una alerta y navega a la pantalla de sesión si la respuesta es exitosa.
                 navigation.navigate('Sesion');
             } else {
                 Alert.alert('Error', data.error);
+                // Muestra una alerta con el error si ocurre algún problema.
             }
         } catch (error) {
             Alert.alert('Ocurrió un error al intentar crear el usuario');
+            // Muestra una alerta si ocurre una excepción.
         }
     };
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Crea una cuenta</Text>
+            {/* Renderiza el título del formulario. */}
 
+            {/* Campos de entrada personalizados para cada dato del formulario. */}
             <Input
                 placeHolder='Nombre del cliente'
                 setValor={nombre}
@@ -96,10 +113,13 @@ export default function CreateAccountForm({ navigation }) {
                 setTextChange={setConfirmarClave} />
 
             <TouchableOpacity onPress={handleSubmit}>
+                {/* Botón para enviar el formulario. */}
                 <Text style={styles.linkText}>Crear cuenta</Text>
             </TouchableOpacity>
             <Text style={styles.link}>¿Ya tienes una cuenta?/</Text>
+            {/* Texto para usuarios que ya tienen una cuenta. */}
             <TouchableOpacity onPress={() => navigation.navigate('Inicio')}>
+                {/* Botón para navegar a la pantalla de inicio de sesión. */}
                 <Text style={styles.linkText}>Iniciar sesión en la pantalla inicio</Text>
             </TouchableOpacity>
         </View>
@@ -107,6 +127,7 @@ export default function CreateAccountForm({ navigation }) {
 };
 
 const styles = StyleSheet.create({
+    // Definición de estilos para el componente.
     container: {
         flex: 1,
         backgroundColor: '#fff',
@@ -148,5 +169,3 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
 });
-
-

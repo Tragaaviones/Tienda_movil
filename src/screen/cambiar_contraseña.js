@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
+// Definición del componente ResetPasswordForm
 const ResetPasswordForm = ({ navigation }) => {
+    // Definición de estados para manejar las contraseñas
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+ // Función para manejar el envío del formulario
     const handleSubmit = () => {
         console.log('Nueva contraseña:', newPassword);
         console.log('Confirmar contraseña:', confirmPassword);
         // Implementar lógica para restablecer la contraseña
     };
 
+// Retorno del JSX que define la UI del componente
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Restablecer contraseña</Text>
@@ -39,12 +43,12 @@ const ResetPasswordForm = ({ navigation }) => {
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.link} onPress={() => navigation.navigate('Inicio')}>
-            <Text style={styles.link}>Regresar al unicio</Text>
+                <Text style={styles.link}>Regresar al unicio</Text>
             </TouchableOpacity>
         </View>
     );
 };
-
+// Definición de estilos para el componente
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -82,11 +86,11 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     link: {
-    color: '#2522AF',
-    fontWeight: 'bold',
-    textAlign: 'center',
+        color: '#2522AF',
+        fontWeight: 'bold',
+        textAlign: 'center',
     },
-    
+
 });
 
 export default ResetPasswordForm;
