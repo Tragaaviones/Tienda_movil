@@ -2,10 +2,10 @@
 import React from "react";
 
 // Importamos el componente para crear un Bottom Tab Navigator de @react-navigation/bottom-tabs.
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // Importamos NavigationContainer de @react-navigation/native para envolver nuestra estructura de navegación.
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer } from "@react-navigation/native";
 
 // Importamos el componente para crear un Native Stack Navigator de @react-navigation/native-stack.
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -14,8 +14,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 // Importamos las pantallas que utilizaremos en nuestra aplicación.
+import Home from "../screen/home";
 import Productos from "../screen/pantalla_principal";
-import Categoria from '../screen/home';
+import Carrito from '../screen/carrito';
 
 import { color } from "react-native-elements/dist/helpers";
 
@@ -34,10 +35,24 @@ function Mytabs() {
             }}>
             {/* Definimos cada pantalla en el Tab Navigator */}
             <Tab.Screen
+                name="Home"
+                component={Home}
+                options={{
+                    tabBarLabel: 'Home',
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons name="home-outline" size={24} color="black" />
+                    ),
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#9368EE'
+                    },
+                }}
+            />
+            <Tab.Screen
                 name="Productos"
                 component={Productos}
                 options={{
-                    tabBarLabel: 'Home',
+                    tabBarLabel: 'Productos',
                     tabBarIcon: ({ color, size }) => (
                         <MaterialCommunityIcons name="inbox-multiple" size={24} color="black" />
                     ),
@@ -48,12 +63,12 @@ function Mytabs() {
                 }}
             />
             <Tab.Screen
-                name="Categorias"
-                component={Categoria}
+                name="Carrito"
+                component={Carrito}
                 options={{
-                    tabBarLabel: 'Categorias',
+                    tabBarLabel: 'Carrito',
                     tabBarIcon: ({ color, size }) => (
-                        <MaterialCommunityIcons name="text-box-outline" size={24} color="black" />
+                        <MaterialCommunityIcons name="cart-outline" size={24} color="black" />
                     ),
                     headerShown: true,
                     headerStyle: {
@@ -67,11 +82,3 @@ function Mytabs() {
 
 // Exportamos el componente Mytabs para que pueda ser utilizado en otros lugares.
 export default Mytabs;
-
-// export default function Navigation() {
-//     return (
-//         <NavigationContainer>
-//             <Mytabs />
-//         </NavigationContainer>
-//     )
-// }

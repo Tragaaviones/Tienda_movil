@@ -6,7 +6,7 @@ import InputEmail from '../components/inputs/input_email'
 import * as Constantes from '../utils/constantes'
 import { useFocusEffect } from '@react-navigation/native';
 
-export default function ({ navigation }) {
+export default function Inicio ({ navigation }) {
 
     const ip = Constantes.IP;
 
@@ -71,7 +71,7 @@ export default function ({ navigation }) {
         try {
             const formData = new FormData();
             formData.append('email', email);
-            formData.append('password',  );
+            formData.append('password', contrasenia );
 
             const response = await fetch(`${ip}/tienda/api/servicios/publico/cliente.php?action=logIn`, {
                 method: 'POST',
@@ -83,7 +83,7 @@ export default function ({ navigation }) {
             if (data.status) {
                 setPassword('')
                 setEmail('')
-                navigation.navigate('Productos');
+                navigation.navigate('navigation');
             } else {
                 console.log(data);
                 Alert.alert('Error sesión', data.error);
