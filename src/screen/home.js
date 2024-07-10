@@ -9,12 +9,12 @@ import * as Constantes from '../utils/constantes';
 
 export default function Home({ navigation }) {
     // Define el componente Home que recibe navigation como prop.
-    const [nombre, setNombre] = useState(null);
+    const [nombre, setNombre] = useState('');
     // Estado para almacenar el nombre del usuario.
     const ip = Constantes.IP;
     // Obtiene la IP del archivo de constantes.
 
-    const Cerrar = async () => {
+    const handleLogout = async () => {
         // Función para manejar el cierre de sesión.
         try {
             const response = await fetch(`${ip}/tienda/api/servicios/publico/cliente.php?action=logOut`, {
@@ -78,12 +78,12 @@ export default function Home({ navigation }) {
             <Text style={styles.title}>Bienvenid@</Text>
             {/* Título de bienvenida */}
             <Text style={styles.subtitle}>
-                {nombre ? nombre : 'No hay Nombre para mostrar'}
+            <Text>Nombre del usuario: {nombre}</Text>
                 {/* Muestra el nombre del usuario o un mensaje por defecto si no hay nombre */}
             </Text>
             <Buttons
                 textoBoton='Cerrar Sesión'
-                accionBoton={Cerrar}
+                accionBoton={handleLogout}
             />
             {/* Botón para cerrar sesión */}
         </View>

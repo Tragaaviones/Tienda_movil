@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, Image } from 'react-native';
 import Input from '../components/inputs/input'
 import InputEmail from '../components/inputs/input_email'
 import * as Constantes from '../utils/constantes'
@@ -98,6 +98,7 @@ export default function Inicio({ navigation }) {
 
     return (
         <View style={styles.container}>
+            <Image source={require('../imagenes/logo_login.png')} style={styles.profileImage} />
             <Text style={styles.title}>Inicio de sesión</Text>
 
             <InputEmail
@@ -133,7 +134,7 @@ export default function Inicio({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#328FE1',
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,
@@ -146,12 +147,17 @@ const styles = StyleSheet.create({
     link: {
         marginTop: 10,
         textAlign: 'center',
-        color: '#000000',
+        color: '#fff',
     },
     linkText: {
-        color: '#2522AF',
+        color: '#000',
         fontWeight: 'bold',
         textAlign: 'center',
+    },
+    profileImage: {
+        width: 300,
+        height: 100,
+        marginBottom: 20,
     },
 });
 

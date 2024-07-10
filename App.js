@@ -6,7 +6,6 @@ import Recuperacion from './src/screen/cambiar_contraseña';
 import Verificacion from './src/screen/verificacion_codigo';
 import cambiar_contraseña from './src/screen/cambiar_contraseña';
 import crear_cuenta from './src/screen/crear_cuenta';
-// import Home from './src/screen/home';
 import Inicio from './src/screen/iniciosesion';
 import Navigation from './src/navigation/navigation'
 

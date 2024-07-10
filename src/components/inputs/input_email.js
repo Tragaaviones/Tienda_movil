@@ -12,6 +12,7 @@ export default function Input_email({placeHolder, setValor, setTextChange}) {
     placeholderTextColor={'#000000'}
     onChangeText={setTextChange}
     keyboardType="email-address"
+    autoCapitalize='none'
     />
 
   );
