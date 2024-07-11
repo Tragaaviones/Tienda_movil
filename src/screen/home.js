@@ -50,11 +50,8 @@ export default function Home({ navigation }) {
 
             const data = await response.json();
             // Convierte la respuesta a formato JSON.
-
-            console.log(data.name.nombre_cliente)
-            // Muestra el nombre del cliente en la consola.
             if (data.status) {
-                setNombre(data.name.nombre_cliente);
+                setNombre(data.username);
                 // Actualiza el estado con el nombre del usuario.
             } else {
                 console.log(data);
@@ -78,7 +75,7 @@ export default function Home({ navigation }) {
             <Text style={styles.title}>Bienvenid@</Text>
             {/* Título de bienvenida */}
             <Text style={styles.subtitle}>
-            <Text>Nombre del usuario: {nombre}</Text>
+            <Text>bienvenido: {nombre}</Text>
                 {/* Muestra el nombre del usuario o un mensaje por defecto si no hay nombre */}
             </Text>
             <Buttons

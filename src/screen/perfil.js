@@ -5,7 +5,7 @@ export default function Perfil() {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Actualizar perfil</Text>
-            <Image source={{ uri: 'https://via.placeholder.com/100' }} style={styles.profileImage} />
+            <Image source={require('../imagenes/login.png')} style={styles.profileImage} />
             <TextInput style={styles.input} placeholder="Nombres" />
             <TextInput style={styles.input} placeholder="Apellidos" />
             <TextInput style={styles.input} placeholder="Correo electrónico" />
@@ -36,9 +36,9 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     profileImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
+        width: 150,
+        height: 150,
+        borderRadius: 45,
         marginBottom: 20,
     },
     input: {

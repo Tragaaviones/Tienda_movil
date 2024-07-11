@@ -28,10 +28,22 @@ export default function CreateAccountForm({ navigation }) {
     const [telefono, setTelefono] = useState('');
     const [clave, setClave] = useState('');
     const [confirmarClave, setConfirmarClave] = useState('');
+    // Expresiones regulares para validar teléfono
+    const telefonoRegex = /^\d{4}-\d{4}$/;
 
     const handleSubmit = async () => {
         // Función para manejar el envío del formulario.
         try {
+            // Validar los campos
+            if (!nombre.trim() || !apellido.trim() || !email.trim() || !direccion.trim() ||
+                !telefono.trim() || !clave.trim() || !confirmarClave.trim()) {
+                Alert.alert("Campos vacios","Debes llenar todos los campos");
+                return;
+            } else if (!telefonoRegex.test(telefono)) {
+                Alert.alert("El teléfono debe tener el formato correcto (####-####)");
+                return;
+            }
+
             const formData = new FormData();
             // Crea un objeto FormData para enviar los datos.
             formData.append('nombre_cliente', nombre);
@@ -53,7 +65,7 @@ export default function CreateAccountForm({ navigation }) {
             if (data.status) {
                 Alert.alert('Datos Guardados correctamente');
                 // Muestra una alerta y navega a la pantalla de sesión si la respuesta es exitosa.
-                navigation.navigate('Sesion');
+                navigation.navigate('Inicio');
             } else {
                 Alert.alert('Error', data.error);
                 // Muestra una alerta con el error si ocurre algún problema.

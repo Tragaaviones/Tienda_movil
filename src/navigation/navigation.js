@@ -44,7 +44,7 @@ function Mytabs() {
                     tabBarIcon: ({ color, size }) => (
                         <MaterialCommunityIcons name="home-outline" size={24} color="black" />
                     ),
-                    headerShown: true,
+                    headerShown: false,
                     headerStyle: {
                         backgroundColor: '#9368EE'
                     },
@@ -58,7 +58,7 @@ function Mytabs() {
                     tabBarIcon: ({ color, size }) => (
                         <MaterialCommunityIcons name="inbox-multiple" size={24} color="black" />
                     ),
-                    headerShown: true,
+                    headerShown: false,
                     headerStyle: {
                         backgroundColor: '#9368EE'
                     },
@@ -72,7 +72,7 @@ function Mytabs() {
                     tabBarIcon: ({ color, size }) => (
                         <MaterialCommunityIcons name="cart-outline" size={24} color="black" />
                     ),
-                    headerShown: true,
+                    headerShown: false,
                     headerStyle: {
                         backgroundColor: '#9368EE'
                     },
@@ -86,7 +86,7 @@ function Mytabs() {
                     tabBarIcon: ({ color, size }) => (
                         <MaterialCommunityIcons name="account-convert" size={24} color="black" />
                     ),
-                    headerShown: true,
+                    headerShown: false,
                     headerStyle: {
                         backgroundColor: '#9368EE'
                     },
