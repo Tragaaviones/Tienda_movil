@@ -7,14 +7,14 @@ const ResetPasswordForm = ({ navigation }) => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
- // Función para manejar el envío del formulario
+    // Función para manejar el envío del formulario
     const handleSubmit = () => {
         console.log('Nueva contraseña:', newPassword);
         console.log('Confirmar contraseña:', confirmPassword);
         // Implementar lógica para restablecer la contraseña
     };
 
-// Retorno del JSX que define la UI del componente
+    // Retorno del JSX que define la UI del componente
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Restablecer contraseña</Text>

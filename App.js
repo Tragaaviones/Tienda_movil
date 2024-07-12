@@ -27,26 +27,3 @@ export default function App() {
         </NavigationContainer>
     );
 }
-
-// const Stack = createStackNavigator();
-
-// function MyStack() {
-//     return (
-//         <Stack.Navigator initialRouteName='Inicio' screenOptions={{ headerShown: false }}>
-//             <Stack.Screen name="Inicio" component={Inicio} />
-//             <Stack.Screen name="Home" component={Home} />
-//             <Stack.Screen name="Recuperacion" component={Recuperacion} />
-//             <Stack.Screen name="Verificacion" component={Verificacion} />
-//             <Stack.Screen name="cambiar_contraseña" component={cambiar_contraseña} />
-//             <Stack.Screen name="crear_cuenta" component={crear_cuenta} />
-//         </Stack.Navigator>
-//     );
-// }
-
-// export default function Navigation() {
-//     return (
-//         <NavigationContainer>
-//             <MyStack />
-//         </NavigationContainer>
-//     );
-// }

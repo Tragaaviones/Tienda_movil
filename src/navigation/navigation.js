@@ -34,6 +34,17 @@ function Mytabs() {
             screenOptions={{
                 headerShown: false, // No mostrar el encabezado por defecto.
                 tabBarActiveTintColor: 'purple', // Color de los iconos activos en la barra de navegación.
+                tabBarStyle: {
+                    position: 'absolute',
+                    bottom: 10, // Ajusta este valor para subir la barra de navegación.
+                    left: 10,
+                    right: 10,
+                    backgroundColor: '#ffffff',
+                    borderRadius: 15,
+                    height: 60,
+                    paddingBottom: 10
+                },
+
             }}>
             {/* Definimos cada pantalla en el Tab Navigator */}
             <Tab.Screen

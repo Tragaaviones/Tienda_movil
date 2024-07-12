@@ -20,7 +20,7 @@ export default function Input_cellphone({ telefono, setTelefono }) {
 
 const styles = StyleSheet.create({
     Input: {
-        backgroundColor:'#ffffff',
+        backgroundColor: '#ffffff',
         color: "#000000",
         width: 300,
         padding: 10,

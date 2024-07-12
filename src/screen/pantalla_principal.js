@@ -1,123 +1,169 @@
-//Importaciones 
-
-import React from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
-import { Card } from 'react-native-elements';
-
+// Importaciones 
+import { useState, useEffect } from 'react';
+import * as Constantes from '../utils/constantes'
+import { View, Text, StyleSheet, SafeAreaView, Alert, FlatList } from 'react-native';
+import ModalCompra from '../components/modals/modal_compra';
+import Constants from 'expo-constants';
+import ProductoCard from '../components/products/producto_card';
+import RNPickerSelect from 'react-native-picker-select';
 
 // Contenido de la página principal
 export default function Productos() {
 
+    const ip = Constantes.IP;
+    const [dataProductos, setDataProductos] = useState([]);
+    const [dataCategorias, setDataCategorias] = useState([]);
+    const [selectedValue, setSelectedValue] = useState(null);
+    const [cantidad, setCantidad] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [idProductoModal, setIdProductoModal] = useState('');
+    const [nombreProductoModal, setNombreProductoModal] = useState('');
+
+    const handleCompra = (nombre, id) => {
+        setModalVisible(true);
+        setIdProductoModal(id);
+        setNombreProductoModal(nombre);
+    };
+
+    const getProductos = async (idCategoriaSelect = 1) => {
+        try {
+            if (idCategoriaSelect <= 1) {
+                return;
+            }
+            const formData = new FormData();
+            formData.append('idCategoria', idCategoriaSelect);
+            const response = await fetch(`${ip}/tienda/api/servicios/publico/producto.php?action=readProductosCategoria`, {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await response.json();
+            if (data.status) {
+                setDataProductos(data.dataset);
+            } else {
+                Alert.alert('Error productos', data.error);
+            }
+        } catch (error) {
+            Alert.alert('Error', 'Ocurrió un error al listar los productos');
+        }
+    };
+
+    const getCategorias = async () => {
+        try {
+            const response = await fetch(`${ip}/tienda/api/servicios/publico/categoria.php?action=readAll`, {
+                method: 'GET',
+            });
+
+            const data = await response.json();
+            if (data.status) {
+                setDataCategorias(data.dataset);
+            } else {
+                Alert.alert('Error categorias', data.error);
+            }
+        } catch (error) {
+            Alert.alert('Error', 'Ocurrió un error al listar las categorias');
+        }
+    };
+
+    useEffect(() => {
+        getProductos();
+        getCategorias();
+    }, []);
+
     return (
         <View style={styles.screen}>
             <View style={styles.header}>
-                <Image source={require('../imagenes/Logo.png')} style={styles.logo} />
-                <TextInput style={styles.searchInput} placeholder="Buscar productos..." />
-                <TouchableOpacity style={styles.cartIcon}>
-
-                </TouchableOpacity>
-
+                <Text style={styles.subtitle}>
+                    Selecciona una categoria
+                </Text>
+                <View style={styles.pickerContainer}>
+                    <RNPickerSelect
+                        style={{ inputAndroid: styles.picker }}
+                        onValueChange={(value) => getProductos(value)}
+                        placeholder={{ label: 'Selecciona una categoría...', value: null }}
+                        items={dataCategorias.map(categoria => ({
+                            label: categoria.nombre,
+                            value: categoria.id_categoria,
+                        }))}
+                    />
+                </View>
             </View>
-            <ScrollView contentContainerStyle={styles.container}>
-                {[1, 2, 3, 4].map((item, index) => (
-                    <Card key={index} containerStyle={styles.card}>
-                        <Card.Image style={styles.productImage} source={require('../imagenes/botas8.jpg')} />
-                        <Card.Divider />
-                        <Text style={styles.productName}>Producto {item}</Text>
-                        <Text style={styles.productPrice}>$10.00</Text>
-                        <TouchableOpacity style={styles.button} onPress={() => { /* lógica para añadir al carrito */ }}>
-                            <Text style={styles.buttonText}>Añadir al Carrito</Text>
-                        </TouchableOpacity>
-                    </Card>
-                ))}
-            </ScrollView>
+            <ModalCompra
+                visible={modalVisible}
+                cerrarModal={setModalVisible}
+                nombreProductoModal={nombreProductoModal}
+                idProductoModal={idProductoModal}
+                cantidad={cantidad}
+                setCantidad={setCantidad}
+            />
+            <SafeAreaView style={styles.container}>
+                <FlatList
+                    data={dataProductos}
+                    keyExtractor={(item) => item.id_producto}
+                    renderItem={({ item }) => (
+                        <ProductoCard
+                            ip={ip}
+                            imagenProducto={item.imagen}
+                            idProducto={item.id_producto}
+                            nombreProducto={item.nombre_producto}
+                            descripcionProducto={item.descripcion_producto}
+                            precioProducto={item.precio_unitario}
+                            existenciasProducto={item.stock_producto}
+                            accionBotonProducto={() => handleCompra(item.nombre_producto, item.id_producto)}
+                        />
+                    )}
+                />
+            </SafeAreaView>
             <View style={styles.footer}>
-                <TouchableOpacity onPress={() => { /* lógica para navegar a Home */ }}>
 
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => { /* lógica para navegar a otra pantalla */ }}>
-
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('pantalla_principal')}>
-
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => { /* lógica para navegar a otra pantalla */ }}>
-
-                </TouchableOpacity>
             </View>
         </View>
     );
 }
 
-//Se comienza el código css
+// Se comienza el código css
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
+        backgroundColor: '#ECA876'
+    },
+    container: {
+        flex: 1,
+        paddingTop: Constants.statusBarHeight,
     },
     header: {
-        flexDirection: 'row',
         alignItems: 'center',
-        padding: 16,
+        padding: 6,
         backgroundColor: '#fff',
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
         paddingTop: 35,
     },
-    logo: {
-        width: 50,
-        height: 50,
-    },
-    searchInput: {
-        flex: 1,
-        marginLeft: 16,
-        padding: 8,
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 8,
-    },
-    cartIcon: {
-        marginLeft: 16,
-    },
-    container: {
-        padding: 16,
-        margin: 20,
-        alignItems: 'center',
-    },
-    card: {
-        width: '100%',
-        marginBottom: 16,
-    },
-    productImage: {
-        height: 150,
-        resizeMode: 'cover',
-    },
-    productName: {
+    subtitle: {
         fontSize: 18,
-        fontWeight: 'bold',
-        marginTop: 8,
-    },
-    productPrice: {
-        fontSize: 16,
-        color: '#888',
-        marginVertical: 8,
-    },
-    button: {
-        backgroundColor: '#00B207',
-        padding: 10,
-        borderRadius: 5,
-        alignItems: 'center',
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold',
+        fontWeight: '600',
+        marginVertical: 5,
+        marginHorizontal: 5,
+        color: '#000',
     },
     footer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        padding: 16,
-        backgroundColor: '#fff',
+        padding: 40,
         borderTopWidth: 1,
-        borderTopColor: '#ccc',
+        borderTopColor: '#ECA876',
+    },
+    pickerContainer: {
+        borderWidth: 1,
+        borderColor: '#4da6ff',
+        borderRadius: 5,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        marginBottom: 10,
+        backgroundColor: '#4da6ff',
+        width: 310,
+    },
+    picker: {
+        color: '#ffffff'
     },
 });

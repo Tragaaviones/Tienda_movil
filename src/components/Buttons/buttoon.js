@@ -1,13 +1,13 @@
 
 import { StyleSheet, Text, TouchableOpacity, Platform } from 'react-native';
 
-export default function Buttons({textoBoton, accionBoton}) {
+export default function Buttons({ textoBoton, accionBoton }) {
 
-    return(
+    return (
         <>
-        <TouchableOpacity style={styles.button} onPress={accionBoton}>
-            <Text style={styles.buttonText}>{textoBoton}</Text>
-        </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={accionBoton}>
+                <Text style={styles.buttonText}>{textoBoton}</Text>
+            </TouchableOpacity>
         </>
     );
 }
@@ -16,10 +16,10 @@ const styles = StyleSheet.create({
 
     button: {
         borderWidth: 1,
-        borderColor: "#AF8260",
+        borderColor: "#007bff",
         width: Platform.OS === 'ios' ? 200 : 200,
         borderRadius: 10,
-        backgroundColor: "#AF8260",
+        backgroundColor: "#007bff",
         padding: Platform.OS === 'ios' ? 15 : 10,
         marginVertical: 5
     },

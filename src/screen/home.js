@@ -75,7 +75,7 @@ export default function Home({ navigation }) {
             <Text style={styles.title}>Bienvenid@</Text>
             {/* Título de bienvenida */}
             <Text style={styles.subtitle}>
-            <Text>bienvenido: {nombre}</Text>
+                <Text>bienvenido: {nombre}</Text>
                 {/* Muestra el nombre del usuario o un mensaje por defecto si no hay nombre */}
             </Text>
             <Buttons
@@ -84,13 +84,14 @@ export default function Home({ navigation }) {
             />
             {/* Botón para cerrar sesión */}
         </View>
+
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#ffff',
+        backgroundColor: '#ECA876',
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginVertical: 5,
-        color: '#5C3D2E', // Color marrón para el título
+        color: '#000', // Color marrón para el título
     },
     // Estilo para el título
     subtitle: {
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         textAlign: 'center',
         marginVertical: 5,
-        color: '#5C3D2E', // Color marrón para el subtítulo
+        color: '#000', // Color marrón para el subtítulo
     },
     // Estilo para el subtítulo
 });

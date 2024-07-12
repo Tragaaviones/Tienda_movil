@@ -37,7 +37,7 @@ export default function CreateAccountForm({ navigation }) {
             // Validar los campos
             if (!nombre.trim() || !apellido.trim() || !email.trim() || !direccion.trim() ||
                 !telefono.trim() || !clave.trim() || !confirmarClave.trim()) {
-                Alert.alert("Campos vacios","Debes llenar todos los campos");
+                Alert.alert("Campos vacios", "Debes llenar todos los campos");
                 return;
             } else if (!telefonoRegex.test(telefono)) {
                 Alert.alert("El teléfono debe tener el formato correcto (####-####)");
