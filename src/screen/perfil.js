@@ -1,25 +1,57 @@
-import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
+import { useState, useEffect } from 'react';
+import * as Constantes from '../utils/constantes'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
 
 export default function Perfil() {
+    const ip = Constantes.IP;
+    const [perfil, setPerfil] = useState(null);
+
+    const readProfile = async () => {
+        try {
+            const response = await fetch(`${ip}/tienda/api/servicios/publico/cliente.php?action=readProfile`, {
+                method: 'GET',
+            });
+
+            const data = await response.json();
+
+            if (data.status) {
+                setPerfil(data.dataset);
+            } else {
+                Alert.alert('Error', data.error);
+                console.log(data.error)
+            }
+        } catch (error) {
+            Alert.alert('Error', 'Ocurrió un error al obtener los datos del perfil');
+        }
+    };
+
+    useEffect(() => {
+        readProfile();
+    }, []);
+
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Actualizar perfil</Text>
-            <Image source={require('../imagenes/login.png')} style={styles.profileImage} />
-            <TextInput style={styles.input} placeholder="Nombres" />
-            <TextInput style={styles.input} placeholder="Apellidos" />
-            <TextInput style={styles.input} placeholder="Correo electrónico" />
-            <TextInput style={styles.input} placeholder="Telefono" keyboardType="phone-pad" />
+            {perfil ? (
+                <>
+                    <Image source={require('../imagenes/login.png')} style={styles.profileImage} />
+                    <Text style={styles.title}>Perfil</Text>
+                    <Text style={styles.input}>Nombre usuario: {perfil.nombre_cliente}</Text>
+                    <Text style={styles.input}>Apellido usuario: {perfil.apellido_cliente}</Text>
+                    <Text style={styles.input}>Correo electronico: {perfil.correo_cliente}</Text>
+                    <Text style={styles.input}>Telefono: {perfil.telefono_cliente}</Text>
+                    <Text style={styles.input}>Dirección: {perfil.direccion_cliente}</Text>
+                </>
+            ) : (
+                <Text>Cargando...</Text>
+            )}
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={[styles.button, styles.cancelButton]}>
-                    <Text style={styles.buttonText}>Cancelar</Text>
-                </TouchableOpacity>
                 <TouchableOpacity style={[styles.button, styles.updateButton]}>
                     <Text style={styles.buttonText}>Actualizar</Text>
                 </TouchableOpacity>
             </View>
         </View>
     );
+
 }
 
 const styles = StyleSheet.create({
@@ -29,6 +61,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,
+        paddingTop: 2
     },
     title: {
         fontSize: 24,
@@ -38,17 +71,20 @@ const styles = StyleSheet.create({
     profileImage: {
         width: 150,
         height: 150,
-        borderRadius: 45,
+        borderRadius: 20,
         marginBottom: 20,
     },
     input: {
         height: 40,
         borderColor: '#000',
+        backgroundColor: '#fff',
+        textAlign: 'center',
         borderWidth: 1,
         borderRadius: 5,
         width: '100%',
         paddingHorizontal: 10,
         marginBottom: 10,
+        padding: 8
     },
     buttonContainer: {
         flexDirection: 'row',
