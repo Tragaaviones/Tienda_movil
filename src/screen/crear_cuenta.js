@@ -128,11 +128,11 @@ export default function CreateAccountForm({ navigation }) {
                 {/* Botón para enviar el formulario. */}
                 <Text style={styles.linkText}>Crear cuenta</Text>
             </TouchableOpacity>
-            <Text style={styles.link}>¿Ya tienes una cuenta?/</Text>
+            <Text style={styles.link}>¿Ya tienes una cuenta?</Text>
             {/* Texto para usuarios que ya tienen una cuenta. */}
             <TouchableOpacity onPress={() => navigation.navigate('Inicio')}>
                 {/* Botón para navegar a la pantalla de inicio de sesión. */}
-                <Text style={styles.linkText}>Iniciar sesión en la pantalla inicio</Text>
+                <Text style={styles.linkText}>Iniciar sesión</Text>
             </TouchableOpacity>
         </View>
     );
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     // Definición de estilos para el componente.
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#ECA876',
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,

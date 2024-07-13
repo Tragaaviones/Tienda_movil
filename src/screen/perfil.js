@@ -1,10 +1,23 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import * as Constantes from '../utils/constantes'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert, Modal } from 'react-native';
 
 export default function Perfil() {
     const ip = Constantes.IP;
+    const [modalVisible, setModalVisible] = useState(false);
     const [perfil, setPerfil] = useState(null);
+    const [nombre, setNombre] = useState('');
+    const [apellido, setApellido] = useState('');
+    const [correo, setCorreo] = useState('');
+    const [telefono, setTelefono] = useState('');
+    const [direccion, setDireccion] = useState('');
+
+    // Referencias para los TextInput
+    const nombreRef = useRef(null);
+    const apellidoRef = useRef(null);
+    const correoRef = useRef(null);
+    const telefonoRef = useRef(null);
+    const direccionRef = useRef(null);
 
     const readProfile = async () => {
         try {
@@ -16,12 +29,54 @@ export default function Perfil() {
 
             if (data.status) {
                 setPerfil(data.dataset);
+                setNombre(data.dataset.nombre_cliente)
+                setApellido(data.dataset.apellido_cliente)
+                setCorreo(data.dataset.correo_cliente)
+                setTelefono(data.dataset.telefono_cliente)
+                setDireccion(data.dataset.direccion_cliente)
             } else {
                 Alert.alert('Error', data.error);
                 console.log(data.error)
             }
         } catch (error) {
             Alert.alert('Error', 'Ocurrió un error al obtener los datos del perfil');
+        }
+    };
+
+    // Función para manejar la actualización de los datos del perfil
+    const handleUpdate = async () => {
+        try {
+            const formData = new FormData();
+            formData.append('nombre_perfil', nombre);
+            formData.append('apellido_perfil', apellido);
+            formData.append('correo_perfil', correo);
+            formData.append('telefono_perfil', telefono);
+            formData.append('direccion_perfil', direccion);
+
+            const url = `${ip}/tienda/api/servicios/publico/cliente.php?action=editProfile`;
+
+            const response = await fetch(url, {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await response.json();
+
+            if (data.status) {
+                Alert.alert('Perfil actualizado', 'Los datos del perfil han sido actualizados correctamente');
+
+                nombreRef.current.clear();
+                apellidoRef.current.clear();
+                correoRef.current.clear();
+                telefonoRef.current.clear();
+                direccionRef.current.clear();
+
+                readProfile();
+            } else {
+                Alert.alert('Error', 'No se pudo actualizar el perfil');
+            }
+        } catch (error) {
+            Alert.alert('Error', 'Ocurrió un error al actualizar el perfil');
         }
     };
 
@@ -45,10 +100,66 @@ export default function Perfil() {
                 <Text>Cargando...</Text>
             )}
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={[styles.button, styles.updateButton]}>
+                <TouchableOpacity onPress={() => setModalVisible(true)} style={[styles.button, styles.updateButton]}>
                     <Text style={styles.buttonText}>Actualizar</Text>
                 </TouchableOpacity>
             </View>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                }}>
+                <View style={styles.modalView}>
+                    <Text style={styles.title}>Actualizar Perfil</Text>
+                    <TextInput
+                        ref={nombreRef}
+                        style={styles.inputModal}
+                        placeholder="Nombre"
+                        value={nombre}
+                        onChangeText={setNombre}
+                    />
+                    <TextInput
+                        ref={apellidoRef}
+                        style={styles.inputModal}
+                        placeholder="Apellido"
+                        value={apellido}
+                        onChangeText={setApellido}
+                    />
+                    <TextInput
+                        ref={correoRef}
+                        style={styles.inputModal}
+                        placeholder="Correo"
+                        value={correo}
+                        onChangeText={setCorreo}
+                    />
+                    <TextInput
+                        ref={telefonoRef}
+                        style={styles.inputModal}
+                        placeholder="Telefono"
+                        value={telefono}
+                        onChangeText={setTelefono}
+                    />
+                    <TextInput
+                        ref={direccionRef}
+                        style={styles.inputModal}
+                        placeholder="Dirección"
+                        value={direccion}
+                        onChangeText={setDireccion}
+                    />
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity style={[styles.button, styles.updateButton]} onPress={handleUpdate}>
+                            <Text style={styles.buttonText}>Actuzalizar</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={() => setModalVisible(false)} >
+                            <Text style={styles.buttonText}>Cancelar</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                </View>
+            </Modal>
         </View>
     );
 
@@ -107,5 +218,29 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#fff',
         fontWeight: 'bold',
+    },
+    modalView: {
+        top: 100,
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    inputModal: {
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        marginBottom: 12,
+        padding: 10,
+        width: '100%',
     },
 });
