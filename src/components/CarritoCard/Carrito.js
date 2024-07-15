@@ -37,7 +37,7 @@ const Carrito = ({ item, cargarCategorias,
           }
         };*/
 
-    const handleDeleteDetalleCarrito = async (idDetalle) => {
+    const handleDeleteDetalleCarrito = async (id_detalle) => {
         try {
             // Mostrar un mensaje de confirmación antes de eliminar
             Alert.alert(
@@ -52,8 +52,8 @@ const Carrito = ({ item, cargarCategorias,
                         text: 'Eliminar',
                         onPress: async () => {
                             const formData = new FormData();
-                            formData.append('idDetalle', idDetalle);
-                            const response = await fetch(`${ip}/coffeeshop/api/services/public/pedido.php?action=deleteDetail`, {
+                            formData.append('idDetalle', id_detalle_producto);
+                            const response = await fetch(`${ip}/tienda/api/servicios/publico/pedido.php?action=deleteDetail`, {
                                 method: 'POST',
                                 body: formData
                             });
@@ -61,7 +61,7 @@ const Carrito = ({ item, cargarCategorias,
                             if (data.status) {
                                 Alert.alert('Datos eliminados correctamente del carrito');
                                 // Llamar a la función de actualización para actualizar la lista
-                                updateDataDetalleCarrito(prevData => prevData.filter(item => item.id_detalle !== idDetalle));
+                                updateDataDetalleCarrito(prevData => prevData.filter(item => item.id_detalle_producto !== idDetalle));
                             } else {
                                 Alert.alert('Error al eliminar del carrito', data.error);
                             }
@@ -78,14 +78,14 @@ const Carrito = ({ item, cargarCategorias,
     return (
         <View style={styles.itemContainer}>
 
-            <Text style={styles.itemText}>ID: {item.id_detalle}</Text>
-            <Text style={styles.itemText}>Nombre: {item.nombre_producto}</Text>
-            <Text style={styles.itemText}>Precio: ${item.precio_producto}</Text>
-            <Text style={styles.itemText}>Cantidad: {item.cantidad_producto}</Text>
-            <Text style={styles.itemText}>SubTotal: ${(parseFloat(item.cantidad_producto) * parseFloat(item.precio_producto)).toFixed(2)}</Text>
+            <Text style={styles.itemText}>ID: {item.ID}</Text>
+            <Text style={styles.itemText}>Nombre: {item.NOMBRE}</Text>
+            <Text style={styles.itemText}>Precio: ${item.PRECIO}</Text>
+            <Text style={styles.itemText}>Cantidad: {item.CANTIDAD}</Text>
+            <Text style={styles.itemText}>SubTotal: ${(parseFloat(item.CANTIDAD) * parseFloat(item.PRECIO)).toFixed(2)}</Text>
 
             <TouchableOpacity style={styles.modifyButton}
-                onPress={() => accionBotonDetalle(item.id_detalle, item.cantidad_producto)}
+                onPress={() => accionBotonDetalle(item.ID, item.CANTIDAD)}
             >
                 <Text style={styles.buttonText}>Modificar Cantidad</Text>
             </TouchableOpacity>

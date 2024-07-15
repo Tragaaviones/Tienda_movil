@@ -15,6 +15,7 @@ export default function Productos() {
     const [dataCategorias, setDataCategorias] = useState([]);
     const [selectedValue, setSelectedValue] = useState(null);
     const [cantidad, setCantidad] = useState('');
+    const [talla,setTalla]=useState('');
     const [modalVisible, setModalVisible] = useState(false);
     const [idProductoModal, setIdProductoModal] = useState('');
     const [nombreProductoModal, setNombreProductoModal] = useState('');
@@ -27,7 +28,7 @@ export default function Productos() {
 
     const getProductos = async (idCategoriaSelect = 1) => {
         try {
-            if (idCategoriaSelect <= 1) {
+            if (idCategoriaSelect <= 0) {
                 return;
             }
             const formData = new FormData();
@@ -94,6 +95,8 @@ export default function Productos() {
                 nombreProductoModal={nombreProductoModal}
                 idProductoModal={idProductoModal}
                 cantidad={cantidad}
+                talla={talla}
+                setTalla={setTalla}
                 setCantidad={setCantidad}
             />
             <SafeAreaView style={styles.container}>

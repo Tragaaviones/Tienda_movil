@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Modal, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
-import Buttons from '../Buttons/Button';
+import Buttons from '../Buttons/buttoon';
 import * as Constantes from '../../utils/constantes';
 
 const Modal_cantidad = ({ setModalVisible, modalVisible, idDetalle, setCantidadProductoCarrito, cantidadProductoCarrito, getDetalleCarrito }) => {
@@ -75,7 +75,7 @@ const Modal_cantidad = ({ setModalVisible, modalVisible, idDetalle, setCantidadP
     );
 };
 
-export default ModalEditarCantidad;
+export default Modal_cantidad;
 
 const styles = StyleSheet.create({
     centeredView: {

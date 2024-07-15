@@ -3,7 +3,7 @@ import { View, Text, Modal, StyleSheet, TouchableOpacity, TextInput, Alert } fro
 import Buttons from '../Buttons/buttoon';
 import * as Constantes from '../../utils/constantes'
 
-const ModalCompra = ({ visible, cerrarModal, nombreProductoModal, idProductoModal, cantidad, setCantidad }) => {
+const ModalCompra = ({ visible, cerrarModal, nombreProductoModal, idProductoModal, talla, setTalla, cantidad, setCantidad }) => {
 
     const ip = Constantes.IP;
 
@@ -17,7 +17,8 @@ const ModalCompra = ({ visible, cerrarModal, nombreProductoModal, idProductoModa
             else {
                 const formData = new FormData();
                 formData.append('idProducto', idProductoModal);
-                formData.append('cantidadProducto', cantidad);
+                formData.append('cantidad', cantidad);
+                formData.append('Talla',talla)
 
                 const response = await fetch(`${ip}/tienda/api/servicios/publico/pedido.php?action=manipulateDetail`, {
                     method: 'POST',
@@ -65,6 +66,14 @@ const ModalCompra = ({ visible, cerrarModal, nombreProductoModal, idProductoModa
                         onChangeText={text => setCantidad(text)}
                         keyboardType="numeric"
                         placeholder="Ingrese la cantidad"
+                    />
+                    <Text style={styles.modalText}>Talla:</Text>
+                    <TextInput
+                        style={styles.input}
+                        value={talla}
+                        onChangeText={text => setTalla(text)}
+                        keyboardType="text"
+                        placeholder="Ingrese la talla"
                     />
                     <Buttons
                         textoBoton='Agregar al carrito'
