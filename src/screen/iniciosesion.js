@@ -1,29 +1,33 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert, Image } from 'react-native';
-import Input from '../components/inputs/input'
-import InputEmail from '../components/inputs/input_email'
-import * as Constantes from '../utils/constantes'
+import Input from '../components/inputs/input';
+import InputEmail from '../components/inputs/input_email';
+import * as Constantes from '../utils/constantes';
 import { useFocusEffect } from '@react-navigation/native';
 
+// Componente principal de la pantalla de inicio
 export default function Inicio({ navigation }) {
-
+    // Obtiene la IP desde las constantes
     const ip = Constantes.IP;
 
-    const [isContra, setIsContra] = useState(true)
-    const [email, setEmail] = useState('');
-    const [contrasenia, setPassword] = useState('');
+    // Definición de estados locales
+    const [isContra, setIsContra] = useState(true); // Estado para manejar la visibilidad de la contraseña
+    const [email, setEmail] = useState(''); // Estado para almacenar el email
+    const [contrasenia, setPassword] = useState(''); // Estado para almacenar la contraseña
 
     // Efecto para cargar los detalles del carrito al cargar la pantalla o al enfocarse en ella
     useFocusEffect(
         // La función useFocusEffect ejecuta un efecto cada vez que la pantalla se enfoca.
         React.useCallback(() => {
-            validarSesion(); // Llama a la función getDetalleCarrito.
+            validarSesion(); // Llama a la función validarSesion.
         }, [])
     );
 
+    // Función para validar la sesión del usuario
     const validarSesion = async () => {
         try {
+            // Realiza una solicitud GET para verificar la sesión del usuario
             const response = await fetch(`${ip}/tienda/api/servicios/publico/cliente.php?action=getUser`, {
                 method: 'GET'
             });
@@ -31,20 +35,22 @@ export default function Inicio({ navigation }) {
             const data = await response.json();
 
             if (data.status === 1) {
-                navigation.navigate('navigation');
-                console.log("Se ingresa con la sesión activa")
+                navigation.navigate('navigation'); // Navega a la pantalla principal si hay sesión activa
+                console.log("Se ingresa con la sesión activa");
             } else {
-                console.log("No hay sesión activa")
-                return
+                console.log("No hay sesión activa");
+                return;
             }
         } catch (error) {
             console.error(error);
             Alert.alert('Error', 'Ocurrió un error al validar la sesión');
         }
-    }
+    };
 
+    // Función para cerrar la sesión del usuario
     const cerrarSesion = async () => {
         try {
+            // Realiza una solicitud GET para cerrar la sesión del usuario
             const response = await fetch(`${ip}/tienda/api/servicios/publico/cliente.php?action=logOut`, {
                 method: 'GET'
             });
@@ -52,16 +58,17 @@ export default function Inicio({ navigation }) {
             const data = await response.json();
 
             if (data.status) {
-                console.log("Sesión Finalizada")
+                console.log("Sesión Finalizada");
             } else {
-                console.log('No se pudo eliminar la sesión')
+                console.log('No se pudo eliminar la sesión');
             }
         } catch (error) {
             console.error(error, "Error desde Catch");
             Alert.alert('Error', 'Ocurrió un error al iniciar sesión con bryancito');
         }
-    }
+    };
 
+    // Función para iniciar sesión
     const Login = async () => {
         if (!email || !contrasenia) {
             Alert.alert('Error', 'Por favor ingrese su correo y contraseña');
@@ -69,10 +76,12 @@ export default function Inicio({ navigation }) {
         }
 
         try {
+            // Crea un objeto FormData con los datos de inicio de sesión
             const formData = new FormData();
             formData.append('email', email);
             formData.append('password', contrasenia);
 
+            // Realiza una solicitud POST para iniciar sesión
             const response = await fetch(`${ip}/tienda/api/servicios/publico/cliente.php?action=logIn`, {
                 method: 'POST',
                 body: formData
@@ -81,9 +90,9 @@ export default function Inicio({ navigation }) {
             const data = await response.json();
 
             if (data.status) {
-                setPassword('')
-                setEmail('')
-                navigation.navigate('navigation');
+                setPassword('');
+                setEmail('');
+                navigation.navigate('navigation'); // Navega a la pantalla principal si el inicio de sesión es exitoso
             } else {
                 console.log(data);
                 Alert.alert('Error sesión', data.error);
@@ -94,8 +103,10 @@ export default function Inicio({ navigation }) {
         }
     };
 
-    useEffect(() => { validarSesion() }, [])
+    // Efecto para validar la sesión cuando se monta el componente
+    useEffect(() => { validarSesion() }, []);
 
+    // Renderizado del componente
     return (
         <View style={styles.container}>
             <Image source={require('../imagenes/logo_login.png')} style={styles.profileImage} />
@@ -129,8 +140,9 @@ export default function Inicio({ navigation }) {
             </TouchableOpacity>
         </View>
     );
-};
+}
 
+// Estilos para el componente
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -160,4 +172,3 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
 });
-

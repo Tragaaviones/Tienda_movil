@@ -1,16 +1,16 @@
-import React, { useState, useRef, useEffect } from 'react';
-import * as Constantes from '../utils/constantes'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert, Modal } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react'; // Importa React y algunos hooks de React
+import * as Constantes from '../utils/constantes'; // Importa constantes desde un archivo local
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert, Modal } from 'react-native'; // Importa componentes de React Native
 
 export default function Perfil() {
-    const ip = Constantes.IP;
-    const [modalVisible, setModalVisible] = useState(false);
-    const [perfil, setPerfil] = useState(null);
-    const [nombre, setNombre] = useState('');
-    const [apellido, setApellido] = useState('');
-    const [correo, setCorreo] = useState('');
-    const [telefono, setTelefono] = useState('');
-    const [direccion, setDireccion] = useState('');
+    const ip = Constantes.IP; // Asigna la IP desde las constantes a una variable local
+    const [modalVisible, setModalVisible] = useState(false); // Estado para manejar la visibilidad del modal
+    const [perfil, setPerfil] = useState(null); // Estado para almacenar los datos del perfil
+    const [nombre, setNombre] = useState(''); // Estado para el nombre
+    const [apellido, setApellido] = useState(''); // Estado para el apellido
+    const [correo, setCorreo] = useState(''); // Estado para el correo
+    const [telefono, setTelefono] = useState(''); // Estado para el teléfono
+    const [direccion, setDireccion] = useState(''); // Estado para la dirección
 
     // Referencias para los TextInput
     const nombreRef = useRef(null);
@@ -19,6 +19,7 @@ export default function Perfil() {
     const telefonoRef = useRef(null);
     const direccionRef = useRef(null);
 
+    // Función para leer el perfil del usuario desde una API
     const readProfile = async () => {
         try {
             const response = await fetch(`${ip}/tienda/api/servicios/publico/cliente.php?action=readProfile`, {
@@ -28,18 +29,18 @@ export default function Perfil() {
             const data = await response.json();
 
             if (data.status) {
-                setPerfil(data.dataset);
-                setNombre(data.dataset.nombre_cliente)
-                setApellido(data.dataset.apellido_cliente)
-                setCorreo(data.dataset.correo_cliente)
-                setTelefono(data.dataset.telefono_cliente)
-                setDireccion(data.dataset.direccion_cliente)
+                setPerfil(data.dataset); // Guarda los datos del perfil en el estado
+                setNombre(data.dataset.nombre_cliente); // Establece el nombre en el estado
+                setApellido(data.dataset.apellido_cliente); // Establece el apellido en el estado
+                setCorreo(data.dataset.correo_cliente); // Establece el correo en el estado
+                setTelefono(data.dataset.telefono_cliente); // Establece el teléfono en el estado
+                setDireccion(data.dataset.direccion_cliente); // Establece la dirección en el estado
             } else {
-                Alert.alert('Error', data.error);
-                console.log(data.error)
+                Alert.alert('Error', data.error); // Muestra un mensaje de error si la respuesta no es exitosa
+                console.log(data.error);
             }
         } catch (error) {
-            Alert.alert('Error', 'Ocurrió un error al obtener los datos del perfil');
+            Alert.alert('Error', 'Ocurrió un error al obtener los datos del perfil'); // Muestra un mensaje de error si ocurre una excepción
         }
     };
 
@@ -47,11 +48,11 @@ export default function Perfil() {
     const handleUpdate = async () => {
         try {
             const formData = new FormData();
-            formData.append('nombre_perfil', nombre);
-            formData.append('apellido_perfil', apellido);
-            formData.append('correo_perfil', correo);
-            formData.append('telefono_perfil', telefono);
-            formData.append('direccion_perfil', direccion);
+            formData.append('nombre_perfil', nombre); // Añade el nombre al FormData
+            formData.append('apellido_perfil', apellido); // Añade el apellido al FormData
+            formData.append('correo_perfil', correo); // Añade el correo al FormData
+            formData.append('telefono_perfil', telefono); // Añade el teléfono al FormData
+            formData.append('direccion_perfil', direccion); // Añade la dirección al FormData
 
             const url = `${ip}/tienda/api/servicios/publico/cliente.php?action=editProfile`;
 
@@ -63,30 +64,32 @@ export default function Perfil() {
             const data = await response.json();
 
             if (data.status) {
-                Alert.alert('Perfil actualizado', 'Los datos del perfil han sido actualizados correctamente');
+                Alert.alert('Perfil actualizado', 'Los datos del perfil han sido actualizados correctamente'); // Muestra un mensaje de éxito
 
+                // Limpia los campos de texto
                 nombreRef.current.clear();
                 apellidoRef.current.clear();
                 correoRef.current.clear();
                 telefonoRef.current.clear();
                 direccionRef.current.clear();
 
-                readProfile();
+                readProfile(); // Vuelve a leer el perfil actualizado
             } else {
-                Alert.alert('Error', 'No se pudo actualizar el perfil');
+                Alert.alert('Error', 'No se pudo actualizar el perfil'); // Muestra un mensaje de error si no se pudo actualizar
             }
         } catch (error) {
-            Alert.alert('Error', 'Ocurrió un error al actualizar el perfil');
+            Alert.alert('Error', 'Ocurrió un error al actualizar el perfil'); // Muestra un mensaje de error si ocurre una excepción
         }
     };
 
+    // Hook useEffect para leer el perfil cuando el componente se monta
     useEffect(() => {
         readProfile();
     }, []);
 
     return (
         <View style={styles.container}>
-            {perfil ? (
+            {perfil ? ( // Verifica si los datos del perfil están disponibles
                 <>
                     <Image source={require('../imagenes/login.png')} style={styles.profileImage} />
                     <Text style={styles.title}>Perfil</Text>
@@ -97,7 +100,7 @@ export default function Perfil() {
                     <Text style={styles.input}>Dirección: {perfil.direccion_cliente}</Text>
                 </>
             ) : (
-                <Text>Cargando...</Text>
+                <Text>Cargando...</Text> // Muestra un mensaje de carga si los datos del perfil no están disponibles
             )}
             <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={() => setModalVisible(true)} style={[styles.button, styles.updateButton]}>
@@ -110,7 +113,7 @@ export default function Perfil() {
                 transparent={true}
                 visible={modalVisible}
                 onRequestClose={() => {
-                    setModalVisible(!modalVisible);
+                    setModalVisible(!modalVisible); // Cierra el modal cuando se solicita
                 }}>
                 <View style={styles.modalView}>
                     <Text style={styles.title}>Actualizar Perfil</Text>
@@ -157,12 +160,10 @@ export default function Perfil() {
                             <Text style={styles.buttonText}>Cancelar</Text>
                         </TouchableOpacity>
                     </View>
-
                 </View>
             </Modal>
         </View>
     );
-
 }
 
 const styles = StyleSheet.create({

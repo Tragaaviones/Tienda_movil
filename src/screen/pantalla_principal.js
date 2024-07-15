@@ -1,6 +1,6 @@
-// Importaciones 
+// Importaciones necesarias para el componente
 import { useState, useEffect } from 'react';
-import * as Constantes from '../utils/constantes'
+import * as Constantes from '../utils/constantes';
 import { View, Text, StyleSheet, SafeAreaView, Alert, FlatList } from 'react-native';
 import ModalCompra from '../components/modals/modal_compra';
 import Constants from 'expo-constants';
@@ -10,22 +10,25 @@ import RNPickerSelect from 'react-native-picker-select';
 // Contenido de la página principal
 export default function Productos() {
 
+    // Definición de variables de estado
     const ip = Constantes.IP;
-    const [dataProductos, setDataProductos] = useState([]);
-    const [dataCategorias, setDataCategorias] = useState([]);
-    const [selectedValue, setSelectedValue] = useState(null);
-    const [cantidad, setCantidad] = useState('');
-    const [talla,setTalla]=useState('');
-    const [modalVisible, setModalVisible] = useState(false);
-    const [idProductoModal, setIdProductoModal] = useState('');
-    const [nombreProductoModal, setNombreProductoModal] = useState('');
+    const [dataProductos, setDataProductos] = useState([]); // Almacena los productos
+    const [dataCategorias, setDataCategorias] = useState([]); // Almacena las categorías
+    const [selectedValue, setSelectedValue] = useState(null); // Almacena la categoría seleccionada
+    const [cantidad, setCantidad] = useState(''); // Almacena la cantidad de productos
+    const [talla, setTalla] = useState(''); // Almacena la talla del producto
+    const [modalVisible, setModalVisible] = useState(false); // Controla la visibilidad del modal
+    const [idProductoModal, setIdProductoModal] = useState(''); // Almacena el ID del producto seleccionado
+    const [nombreProductoModal, setNombreProductoModal] = useState(''); // Almacena el nombre del producto seleccionado
 
+    // Función para manejar la compra de un producto
     const handleCompra = (nombre, id) => {
         setModalVisible(true);
         setIdProductoModal(id);
         setNombreProductoModal(nombre);
     };
 
+    // Función para obtener los productos de una categoría específica
     const getProductos = async (idCategoriaSelect = 1) => {
         try {
             if (idCategoriaSelect <= 0) {
@@ -49,6 +52,7 @@ export default function Productos() {
         }
     };
 
+    // Función para obtener todas las categorías
     const getCategorias = async () => {
         try {
             const response = await fetch(`${ip}/tienda/api/servicios/publico/categoria.php?action=readAll`, {
@@ -66,11 +70,13 @@ export default function Productos() {
         }
     };
 
+    // Hook useEffect para obtener los productos y categorías al cargar el componente
     useEffect(() => {
         getProductos();
         getCategorias();
     }, []);
 
+    // Renderizado de la UI del componente
     return (
         <View style={styles.screen}>
             <View style={styles.header}>
@@ -124,7 +130,7 @@ export default function Productos() {
     );
 }
 
-// Se comienza el código css
+// Se definen los estilos para el componente
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
