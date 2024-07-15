@@ -128,7 +128,7 @@ export default function Productos() {
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
-        backgroundColor: '#ECA876'
+        backgroundColor: '#B6D6F0'
     },
     container: {
         flex: 1,

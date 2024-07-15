@@ -150,7 +150,7 @@ export default Carrito;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EAD8C0',
+    backgroundColor: '#B6D6F0',
     paddingTop: Constants.statusBarHeight,
     paddingHorizontal: 16,
   },

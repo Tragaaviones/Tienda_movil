@@ -105,7 +105,7 @@ export default Carrito;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#EAD8C0',
+        backgroundColor: '#B6D6F0',
         paddingTop: Constants.statusBarHeight,
         paddingHorizontal: 16,
     },
@@ -134,20 +134,20 @@ const styles = StyleSheet.create({
     },
     modifyButton: {
         borderWidth: 1,
-        borderColor: '#8F6B58',
+        borderColor: '#9FACF4',
         borderRadius: 8,
         paddingVertical: 8,
         paddingHorizontal: 16,
-        backgroundColor: '#8F6B58', // Light brown color for modify button
+        backgroundColor: '#9FACF4', // Light brown color for modify button
         marginVertical: 4,
     },
     deleteButton: {
         borderWidth: 1,
-        borderColor: '#D2691E',
+        borderColor: '#BBB5F5',
         borderRadius: 8,
         paddingVertical: 8,
         paddingHorizontal: 16,
-        backgroundColor: '#D2691E', // Darker orange color for delete button
+        backgroundColor: '#BBB5F5', // Darker orange color for delete button
         marginVertical: 4,
     },
     buttonText: {
