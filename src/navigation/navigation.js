@@ -18,6 +18,7 @@ import Home from "../screen/home";
 import Productos from "../screen/pantalla_principal";
 import Carrito from '../screen/carrito';
 import Perfil from "../screen/perfil";
+import Historial from "../screen/historial";
 
 
 import { color } from "react-native-elements/dist/helpers";
@@ -94,6 +95,20 @@ function Mytabs() {
                 component={Perfil}
                 options={{
                     tabBarLabel: 'Perfil',
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons name="account-convert" size={24} color="black" />
+                    ),
+                    headerShown: false,
+                    headerStyle: {
+                        backgroundColor: '#9368EE'
+                    },
+                }}
+            />
+            <Tab.Screen
+                name="Historial"
+                component={Historial}
+                options={{
+                    tabBarLabel: 'Historial',
                     tabBarIcon: ({ color, size }) => (
                         <MaterialCommunityIcons name="account-convert" size={24} color="black" />
                     ),
