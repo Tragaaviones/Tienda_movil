@@ -91,12 +91,12 @@ function Mytabs() {
                 }}
             />
             <Tab.Screen
-                name="Perfil"
-                component={Perfil}
+                name="Historial"
+                component={Historial}
                 options={{
-                    tabBarLabel: 'Perfil',
+                    tabBarLabel: 'Historial',
                     tabBarIcon: ({ color, size }) => (
-                        <MaterialCommunityIcons name="account-convert" size={24} color="black" />
+                        <MaterialCommunityIcons name="history" size={24} color="black" />
                     ),
                     headerShown: false,
                     headerStyle: {
@@ -105,10 +105,10 @@ function Mytabs() {
                 }}
             />
             <Tab.Screen
-                name="Historial"
-                component={Historial}
+                name="Perfil"
+                component={Perfil}
                 options={{
-                    tabBarLabel: 'Historial',
+                    tabBarLabel: 'Perfil',
                     tabBarIcon: ({ color, size }) => (
                         <MaterialCommunityIcons name="account-convert" size={24} color="black" />
                     ),
