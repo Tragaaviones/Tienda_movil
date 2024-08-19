@@ -3,7 +3,7 @@ import { View, Text, Modal, StyleSheet, TouchableOpacity, TextInput, Alert } fro
 import Buttons from '../Buttons/buttoon';
 import * as Constantes from '../../utils/constantes';
 
-const Modal_cantidad = ({ setModalVisible, modalVisible, idDetalle, setCantidadProductoCarrito, cantidadProductoCarrito, getDetalleCarrito }) => {
+const Modal_cantidad = ({ setModalVisible, modalVisible, id_detalle, setCantidadProductoCarrito, cantidadProductoCarrito, getDetalleCarrito }) => {
 
     const ip = Constantes.IP;
 
@@ -15,8 +15,8 @@ const Modal_cantidad = ({ setModalVisible, modalVisible, idDetalle, setCantidadP
             }
 
             const formData = new FormData();
-            formData.append('idDetalle', idDetalle);
             formData.append('cantidadProducto', cantidadProductoCarrito);
+            formData.append('idDetalle', id_detalle);
 
             const response = await fetch(`${ip}/tienda/api/servicios/publico/pedido.php?action=updateDetail`, {
                 method: 'POST',
@@ -24,6 +24,7 @@ const Modal_cantidad = ({ setModalVisible, modalVisible, idDetalle, setCantidadP
             });
 
             const data = await response.json();
+            console.log(data);
             if (data.status) {
                 Alert.alert('Se actualizo el detalle del producto');
                 getDetalleCarrito();
