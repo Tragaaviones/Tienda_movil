@@ -2,8 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View, StyleSheet, FlatList, Alert } from 'react-native';
 import Constants from 'expo-constants';
 import * as Constantes from '../../utils/constantes'
+import { useFocusEffect } from '@react-navigation/native';
 
-const Carrito = ({ item, cargarCategorias,
+const Carrito = ({ 
+    navigation,
+    item, 
+    cargarCategorias,
     modalVisible,
     setModalVisible,
     cantidadProductoCarrito,
@@ -30,7 +34,7 @@ const Carrito = ({ item, cargarCategorias,
                         text: 'Eliminar',
                         onPress: async () => {
                             const formData = new FormData();
-                            formData.append('idDetalle', id_detalle_producto);
+                            formData.append('idDetalle', id_detalle);
                             const response = await fetch(`${ip}/tienda/api/servicios/publico/pedido.php?action=deleteDetail`, {
                                 method: 'POST',
                                 body: formData
@@ -69,7 +73,7 @@ const Carrito = ({ item, cargarCategorias,
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.deleteButton}
-                onLongPress={() => handleDeleteDetalleCarrito(item.id_detalle)}
+                onPress={() => handleDeleteDetalleCarrito(item.ID)}
             >
                 <Text style={styles.buttonText}>Eliminar del carrito</Text>
             </TouchableOpacity>

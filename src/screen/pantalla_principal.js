@@ -112,7 +112,7 @@ export default function Productos() {
                     renderItem={({ item }) => (
                         <ProductoCard
                             ip={ip}
-                            imagenProducto={item.imagen}
+                            imagenProducto={item.IMAGEN}
                             idProducto={item.id_producto}
                             nombreProducto={item.nombre_producto}
                             descripcionProducto={item.descripcion_producto}
