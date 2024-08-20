@@ -2,6 +2,7 @@
 import { StatusBar, StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, FlatList, ScrollView, SafeAreaView, Image, Card } from 'react-native';
 import { useState, useEffect } from 'react';
 import { FontAwesome } from '@expo/vector-icons'; // Importamos el ícono
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 //recibimos por props la imagen del producto, nombre, precio y otras propiedades de productos para mostrarlas en el componente de 
 //productoCard
@@ -29,6 +30,11 @@ export default function ProductoCard({ ip, imagenProducto, idProducto, nombrePro
                 onPress={accionBotonProducto}>
                 <FontAwesome name="plus-circle" size={24} color="white" />
                 <Text style={styles.cartButtonText}>Agregar al carrito</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={styles.cartButton}>
+                <MaterialCommunityIcons name="comment-text-multiple-outline" size={24} color="white" />
+                <Text style={styles.cartButtonText}>Comentarios y valoraciones</Text>
             </TouchableOpacity>
         </View>
 
