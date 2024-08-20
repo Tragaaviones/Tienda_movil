@@ -1,5 +1,5 @@
-// Importaciones necesarias para el componente
-import { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react'; // Importa React y algunos hooks de React
+import { useFocusEffect } from '@react-navigation/native';
 import * as Constantes from '../utils/constantes';
 import { View, Text, StyleSheet, SafeAreaView, Alert, FlatList } from 'react-native';
 import ModalCompra from '../components/modals/modal_compra';
@@ -7,28 +7,25 @@ import Constants from 'expo-constants';
 import ProductoCard from '../components/products/producto_card';
 import RNPickerSelect from 'react-native-picker-select';
 
-// Contenido de la página principal
 export default function Productos() {
-
-    // Definición de variables de estado
     const ip = Constantes.IP;
-    const [dataProductos, setDataProductos] = useState([]); // Almacena los productos
-    const [dataCategorias, setDataCategorias] = useState([]); // Almacena las categorías
-    const [selectedValue, setSelectedValue] = useState(null); // Almacena la categoría seleccionada
+    const [dataProductos, setDataProductos] = useState([]);
+    const [dataCategorias, setDataCategorias] = useState([]);
+    const [selectedValue, setSelectedValue] = useState(null);
     const [cantidad, setCantidad] = useState(''); // Almacena la cantidad de productos
     const [talla, setTalla] = useState(''); // Almacena la talla del producto
-    const [modalVisible, setModalVisible] = useState(false); // Controla la visibilidad del modal
-    const [idProductoModal, setIdProductoModal] = useState(''); // Almacena el ID del producto seleccionado
-    const [nombreProductoModal, setNombreProductoModal] = useState(''); // Almacena el nombre del producto seleccionado
+    const [modalVisible, setModalVisible] = useState(false);
+    const [idProductoModal, setIdProductoModal] = useState('');
+    const [nombreProductoModal, setNombreProductoModal] = useState('');
+    const [existenciasProducto, setExistenciasProducto] = useState(0); // Nuevo estado para existencias del producto
 
-    // Función para manejar la compra de un producto
-    const handleCompra = (nombre, id) => {
+    const handleCompra = (nombre, id, existencias) => {
         setModalVisible(true);
         setIdProductoModal(id);
         setNombreProductoModal(nombre);
+        setExistenciasProducto(existencias); // Guardar existencias del producto seleccionado
     };
 
-    // Función para obtener los productos de una categoría específica
     const getProductos = async (idCategoriaSelect = 1) => {
         try {
             if (idCategoriaSelect <= 0) {
@@ -52,7 +49,6 @@ export default function Productos() {
         }
     };
 
-    // Función para obtener todas las categorías
     const getCategorias = async () => {
         try {
             const response = await fetch(`${ip}/tienda/api/servicios/publico/categoria.php?action=readAll`, {
@@ -70,13 +66,28 @@ export default function Productos() {
         }
     };
 
-    // Hook useEffect para obtener los productos y categorías al cargar el componente
     useEffect(() => {
         getProductos();
         getCategorias();
     }, []);
 
-    // Renderizado de la UI del componente
+    // Ejecuta fillList cuando la pantalla recibe foco
+    useFocusEffect(
+        useCallback(() => {
+            getProductos();
+        }, [])
+    );
+
+    const actualizarExistencias = (idProducto, nuevaCantidad) => {
+        setDataProductos(prevProductos =>
+            prevProductos.map(producto =>
+                producto.id_producto === idProducto
+                    ? { ...producto, stock_producto: producto.stock_producto - nuevaCantidad }
+                    : producto
+            )
+        );
+    };
+
     return (
         <View style={styles.screen}>
             <View style={styles.header}>
@@ -104,6 +115,8 @@ export default function Productos() {
                 talla={talla}
                 setTalla={setTalla}
                 setCantidad={setCantidad}
+                existenciasProducto={existenciasProducto} // Pasar existencias al modal
+                actualizarExistencias={actualizarExistencias} // Función para actualizar existencias
             />
             <SafeAreaView style={styles.container}>
                 <FlatList
@@ -118,19 +131,17 @@ export default function Productos() {
                             descripcionProducto={item.descripcion_producto}
                             precioProducto={item.precio_unitario}
                             existenciasProducto={item.stock_producto}
-                            accionBotonProducto={() => handleCompra(item.nombre_producto, item.id_producto)}
+                            accionBotonProducto={() => handleCompra(item.nombre_producto, item.id_producto, item.stock_producto)}
                         />
                     )}
                 />
             </SafeAreaView>
             <View style={styles.footer}>
-
             </View>
         </View>
     );
 }
 
-// Se definen los estilos para el componente
 const styles = StyleSheet.create({
     screen: {
         flex: 1,

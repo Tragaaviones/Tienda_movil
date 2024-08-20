@@ -18,7 +18,7 @@ const ModalCompra = ({ visible, cerrarModal, nombreProductoModal, idProductoModa
                 const formData = new FormData();
                 formData.append('idProducto', idProductoModal);
                 formData.append('cantidad', cantidad);
-                formData.append('Talla',talla)
+                formData.append('Talla', talla)
 
                 const response = await fetch(`${ip}/tienda/api/servicios/publico/pedido.php?action=manipulateDetail`, {
                     method: 'POST',
@@ -30,6 +30,8 @@ const ModalCompra = ({ visible, cerrarModal, nombreProductoModal, idProductoModa
                 if (data.status) {
                     Alert.alert('Datos Guardados correctamente');
                     cerrarModal(false);
+                    setCantidad(0)
+                    setTalla('');
                 } else {
                     Alert.alert('Error', data.error);
                 }
