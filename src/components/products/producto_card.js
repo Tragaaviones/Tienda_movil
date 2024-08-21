@@ -30,7 +30,7 @@ export default function ProductoCard({ ip, imagenProducto, idProducto, nombrePro
                 onPress={accionBotonProducto}>
                 <FontAwesome name="plus-circle" size={24} color="white" />
                 <Text style={styles.cartButtonText}>Agregar al carrito</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>n
             <TouchableOpacity
                 style={styles.cartButton}>
                 <MaterialCommunityIcons name="comment-text-multiple-outline" size={24} color="white" />
