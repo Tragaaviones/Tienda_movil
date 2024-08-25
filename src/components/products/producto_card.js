@@ -1,29 +1,81 @@
-import { StatusBar, StyleSheet, Text, View, TextInput, TouchableOpacity, Modal, Alert, FlatList, Image } from 'react-native';
-import { useState } from 'react';
+import { StatusBar, StyleSheet, Text, View, TextInput, TouchableOpacity, Modal, Alert, Image, ScrollView } from 'react-native';
+import { useState, useEffect } from 'react';
 import { FontAwesome } from '@expo/vector-icons'; 
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'; 
 
 export default function ProductoCard({ ip, imagenProducto, idProducto, nombreProducto, descripcionProducto, precioProducto, existenciasProducto, accionBotonProducto }) {
-    const [showModal, setShowModal] = useState(false);
-    const [calificacion, setCalificacion] = useState(null);
+    const [showModalAgregar, setShowModalAgregar] = useState(false);
+    const [showModalVer, setShowModalVer] = useState(false);
     const [comentario, setComentario] = useState('');
+    const [valoracion, setValoracion] = useState(0);
+    const [comentariosValoraciones, setComentariosValoraciones] = useState([]);
 
-    const submitValoracion = () => {
-        // Aquí puedes manejar la lógica para enviar la valoración
-        console.log('Calificación:', calificacion);
-        console.log('Comentario:', comentario);
-        Alert.alert('Gracias por tu valoración!'); // Mensaje de confirmación
-        setShowModal(false);
-        // Resetear los campos
-        setCalificacion(null);
-        setComentario('');
+    useEffect(() => {
+        fillCommentsAndRatings();
+    }, []);
+
+
+
+    const fillCommentsAndRatings = async () => {
+        try {
+          const response = await fetch(`${ip}/tienda/api/servicios/publico/comentarios.php?action=readAllPublic`, {
+            method: 'POST', // O usa 'GET' si no necesitas enviar datos
+          });
+      
+          const comentariosValoracionesData = await response.json();
+      
+          if (comentariosValoracionesData.status && Array.isArray(comentariosValoracionesData.dataset)) {
+            setComentariosValoraciones(comentariosValoracionesData.dataset);
+          } else {
+            setComentariosValoraciones([]);
+          }
+        } catch (error) {
+          console.error('Error fetching comments and ratings:', error);
+          setComentariosValoraciones([]);
+        }
+      };
+      
+    
+    const submitValoracion = async () => {
+        const formData = new FormData();
+        formData.append('comentario', comentario);
+        formData.append('VALORACION', valoracion);
+        
+        const response = await fetch(`${ip}/tienda/api/servicios/publico/comentarios.php?action=createRow`, {
+            method: 'POST',
+            body: formData,
+        });
+
+        const DATA = await response.json();
+
+        if (DATA.status) {
+            Alert.alert('Gracias por tu comentario!');
+            setComentario('');
+            setValoracion(0);
+            setShowModalAgregar(false);
+            fillCommentsAndRatings(); // Recargar comentarios después de agregar uno nuevo
+        } else {
+            Alert.alert('Error', DATA.error);
+        }
+    };
+
+    const closeModal = () => setShowModalVer(false);
+
+    const generateStars = (rating) => {
+        return [1, 2, 3, 4, 5].map(star => (
+            <FontAwesome key={star} name={star <= rating ? 'star' : 'star-o'} size={24} color="gold" />
+        ));
+    };
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     };
 
     return (
         <View style={styles.card}>
             <View style={styles.imageContainer}>
                 <Image
-                    source={{ uri: $`{ip}/tienda/api/imagenes/productos/${imagenProducto}` }}
+                    source={{ uri: `${ip}/tienda/api/imagenes/productos/${imagenProducto}` }}
                     style={styles.image}
                     resizeMode="contain"
                 />
@@ -34,40 +86,97 @@ export default function ProductoCard({ ip, imagenProducto, idProducto, nombrePro
             <Text style={styles.textTitle}>Existencias: <Text style={styles.textDentro}>{existenciasProducto} {(existenciasProducto === 1) ? 'Unidad' : 'Unidades'}</Text></Text>
             <TouchableOpacity
                 style={styles.cartButton}
-                onPress={accionBotonProducto}>
-                <FontAwesome name="plus-circle" size={24} color="white" />
+                onPress={accionBotonProducto}
+            >
                 <Text style={styles.cartButtonText}>Agregar al carrito</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.ratingButton} onPress={() => setShowModal(true)}>
-                <Text style={styles.ratingButtonText}>Calificar producto</Text>
+
+            {/* Botón para abrir el modal de agregar comentario */}
+            <TouchableOpacity
+                style={styles.commentButton}
+                onPress={() => setShowModalAgregar(true)}
+            >
+                <Text style={styles.commentButtonText}>Agregar comentario</Text>
             </TouchableOpacity>
 
-            <Modal visible={showModal} animationType="slide" transparent={true}>
-                <View style={styles.modalOverlay}>
-                    <View style={styles.modalContainer}>
-                        <Text style={styles.modalTitle}>Calificación del producto</Text>
-                        <View style={styles.ratingContainer}>
-                            {[5, 4, 3, 2, 1].map((rating) => (
-                                <TouchableOpacity key={rating} onPress={() => setCalificacion(rating)}>
-                                    <Text style={calificacion >= rating ? styles.selectedStar : styles.star}>★</Text>
+            {/* Modal para agregar comentario */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={showModalAgregar}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalView}>
+                        <TextInput
+                            placeholder="Escribe tu comentario"
+                            value={comentario}
+                            onChangeText={setComentario}
+                            style={styles.input}
+                        />
+                        <Text>Calificación:</Text>
+                        <View style={styles.starsContainer}>
+                            {[1, 2, 3, 4, 5].map(star => (
+                                <TouchableOpacity key={star} onPress={() => setValoracion(star)}>
+                                    <FontAwesome name={star <= valoracion ? 'star' : 'star-o'} size={24} color="gold" />
                                 </TouchableOpacity>
                             ))}
                         </View>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Escribe tu comentario aquí..."
-                            value={comentario}
-                            onChangeText={setComentario}
-                            multiline={true}
-                        />
-                        <View style={styles.modalButtons}>
-                            <TouchableOpacity style={styles.button} onPress={submitValoracion}>
-                                <Text style={styles.buttonText}>Guardar</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.button} onPress={() => setShowModal(false)}>
-                                <Text style={styles.buttonText}>Cancelar</Text>
-                            </TouchableOpacity>
-                        </View>
+                        <TouchableOpacity
+                            style={styles.submitButton}
+                            onPress={submitValoracion}
+                        >
+                            <Text style={styles.submitButtonText}>Enviar</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.closeButton}
+                            onPress={() => setShowModalAgregar(false)}
+                        >
+                            <Text style={styles.closeButtonText}>Cerrar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+
+            {/* Botón para abrir el modal de ver comentarios */}
+            <TouchableOpacity
+                style={styles.viewCommentsButton}
+                onPress={() => setShowModalVer(true)}
+            >
+                <Text style={styles.viewCommentsButtonText}>Ver comentarios</Text>
+            </TouchableOpacity>
+
+            {/* Modal para ver comentarios */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={showModalVer}
+                onRequestClose={closeModal}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>Valoraciones del Producto</Text>
+                        <ScrollView style={styles.commentList}>
+                            {comentariosValoraciones.length > 0 ? (
+                                comentariosValoraciones.map((comment, index) => (
+                                    <View key={index} style={styles.commentCard}>
+                                        <Text style={styles.commentTitle}>{comment.nombre_cliente} {comment.apellido_cliente}</Text>
+                                        <View style={styles.commentStars}>
+                                            {generateStars(comment.calificacion_producto)}
+                                        </View>
+                                        <Text style={styles.commentDate}>{formatDate(comment.fecha_comentario)}</Text>
+                                        <Text style={styles.commentText}>{comment.comentario}</Text>
+                                    </View>
+                                ))
+                            ) : (
+                                <Text style={styles.noCommentsText}>No hay comentarios ni valoraciones disponibles.</Text>
+                            )}
+                        </ScrollView>
+                        <TouchableOpacity
+                            style={styles.closeButton}
+                            onPress={closeModal}
+                        >
+                            <Text style={styles.closeButtonText}>Cerrar</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </Modal>
@@ -77,123 +186,174 @@ export default function ProductoCard({ ip, imagenProducto, idProducto, nombrePro
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: '#ffffff',
-        borderRadius: 8,
+        margin: 10,
         padding: 10,
-        marginVertical: 15,
-        marginHorizontal: 30,
+        backgroundColor: '#fff',
+        borderRadius: 8,
         shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
         shadowOpacity: 0.25,
         shadowRadius: 4,
-        elevation: 10,
+        elevation: 5,
+    },
+    imageContainer: {
+        height: 200,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    image: {
+        width: '100%',
+        height: '100%',
+    },
+    textTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
     },
     text: {
         fontSize: 16,
-        marginBottom: 8,
-    },
-    textTitle: {
-        fontSize: 16,
-        marginBottom: 8,
-        fontWeight: '700',
-    },
-    image: {
-        width: 200,
-        height: 200,
-        borderRadius: 8,
-        marginBottom: 12,
-    },
-    imageContainer: {
-        alignItems: 'center',
     },
     textDentro: {
-        fontWeight: '400',
+        fontWeight: 'normal',
     },
     cartButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#00B207',
+        backgroundColor: '#007bff',
+        padding: 10,
         borderRadius: 5,
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        marginVertical: 10,
+        alignItems: 'center',
     },
     cartButtonText: {
-        color: '#ffffff',
-        fontSize: 16,
-        fontWeight: '600',
-        marginLeft: 10,
-        textAlign: 'center',
+        color: '#fff',
+        fontWeight: 'bold',
     },
-    ratingButton: {
-        backgroundColor: '#007BFF',
+    commentButton: {
+        backgroundColor: '#28a745',
+        padding: 10,
         borderRadius: 5,
-        paddingVertical: 10,
-        paddingHorizontal: 20,
         alignItems: 'center',
-        marginVertical: 10,
+        marginTop: 10,
     },
-    ratingButtonText: {
-        color: '#ffffff',
-        fontSize: 16,
-        fontWeight: '600',
+    viewCommentsButton: {
+        backgroundColor: '#17a2b8',
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginTop: 10,
     },
-    modalOverlay: {
+    commentButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    viewCommentsButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    modalContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0,0,0,0.5)',
     },
-    modalContainer: {
-        width: '90%',
-        backgroundColor: '#fff',
-        borderRadius: 10,
+    modalView: {
+        width: '80%',
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    input: {
+        width: '100%',
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderRadius: 5,
+        padding: 10,
+        marginBottom: 20,
+    },
+    submitButton: {
+        backgroundColor: '#28a745',
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginTop: 10,
+        width: '100%',
+    },
+    submitButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    closeButton: {
+        backgroundColor: '#dc3545',
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginTop: 10,
+        width: '100%',
+    },
+    closeButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    starsContainer: {
+        flexDirection: 'row',
+        marginBottom: 10,
+    },
+    modalContent: {
+        width: '80%',
+        backgroundColor: 'white',
+        borderRadius: 20,
         padding: 20,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
         elevation: 5,
     },
     modalTitle: {
-        fontSize: 20,
+        fontSize: 22,
         fontWeight: 'bold',
-        marginBottom: 15,
-        textAlign: 'center',
+        marginBottom: 10,
     },
-    input: {
-        height: 80,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        marginBottom: 20,
+    commentList: {
+        maxHeight: 300,
+        width: '100%',
+    },
+    commentCard: {
         padding: 10,
-        borderRadius: 5,
-        textAlignVertical: 'top',
+        marginBottom: 10,
+        borderBottomColor: '#ccc',
+        borderBottomWidth: 1,
     },
-    ratingContainer: {
+    commentTitle: {
+        fontWeight: 'bold',
+    },
+    commentStars: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 15,
+        marginVertical: 5,
     },
-    star: {
-        fontSize: 30,
-        color: '#ccc',
+    commentDate: {
+        fontSize: 12,
+        color: 'gray',
     },
-    selectedStar: {
-        fontSize: 30,
-        color: '#FFD700',
+    commentText: {
+        fontSize: 14,
     },
-    modalButtons: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    button: {
-        backgroundColor: '#28a745',
-        borderRadius: 5,
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        marginVertical: 10,
-    },
-    buttonText: {
-        color: '#ffffff',
+    noCommentsText: {
         fontSize: 16,
-        fontWeight: '600',
         textAlign: 'center',
+        color: 'gray',
     },
 });
