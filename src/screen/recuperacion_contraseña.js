@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ScrollView, Image } from 'react-native';
 import { useState } from 'react';
 import * as Constantes from '../utils/constantes';
 import Constants from 'expo-constants';
@@ -60,32 +60,43 @@ export default function RecuperarContrasena({ navigation }) {
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollViewStyle}>
+
+                <View style={styles.containerInputs}>
                 <Text style={styles.texto}>Recuperar Contraseña</Text>
+                <Image source={require('../imagenes/recuperacion.png')} style={styles.profileImage} />
+                    <View style={styles.InputEmail}>
+                        <InputEmail
+                            placeHolder='Correo Electrónico'
+                            setValor={email}
+                            setTextChange={setEmail}
+                        />
+                    </View>
 
-                <InputEmail
-                    placeHolder='Correo Electrónico'
-                    setValor={email}
-                    setTextChange={setEmail}
-                />
+                    <View style={styles.inputToken}>
+                        <Input
+                            placeHolder='Ingrese el Token'
+                            setValor={token}
+                            setTextChange={setToken}
+                            contra={isContra}
+                        />
+                    </View>
 
-                <Input
-                    placeHolder='Ingrese el Token'
-                    setValor={token}
-                    setTextChange={setToken}
-                    contra={isContra}
-                />
+                    <View style={styles.inputNuevacontra}>
+                        <Input
+                            placeHolder='Nueva Contraseña'
+                            setValor={nuevaClave}
+                            setTextChange={setNuevaClave}
+                            contra={isContra}
+                        />
+                    </View>
 
-                <Input
-                    placeHolder='Nueva Contraseña'
-                    setValor={nuevaClave}
-                    setTextChange={setNuevaClave}
-                    contra={isContra}
-                />
-
-                <Buttons
-                    textoBoton='Actualizar Contraseña'
-                    accionBoton={handleResetPassword}
-                />
+                    <View style={styles.button}>
+                        <Buttons
+                            textoBoton='Actualizar Contraseña'
+                            accionBoton={handleResetPassword}
+                        />
+                    </View>
+                </View>
             </ScrollView>
         </View>
     );
@@ -94,17 +105,33 @@ export default function RecuperarContrasena({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
-        paddingTop: Constants.statusBarHeight + 5,
+        backgroundColor: '#9FACF4',
+        justifyContent: 'center',
+        paddingTop: Constants.statusBarHeight + 5
     },
     scrollViewStyle: {
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     texto: {
         color: '#322C2B',
         fontWeight: '900',
         fontSize: 20,
-        marginBottom: 20
+        marginBottom: 20,
+        textAlign: 'center'
     },
+    containerInputs: {
+        marginTop: 150,
+        alignItems: 'center',
+    },
+    button:{
+        alignItems: 'center'
+    },
+    profileImage: {
+        width: 175,
+        height: 120,
+        paddingTop: 200,
+    
+    }
+
 });
