@@ -51,7 +51,7 @@ export default function Home({ navigation }) {
             const data = await response.json();
             // Convierte la respuesta a formato JSON.
             if (data.status) {
-                setNombre(data.username);
+                setNombre(data.name);
                 // Actualiza el estado con el nombre del usuario.
             } else {
                 console.log(data);
