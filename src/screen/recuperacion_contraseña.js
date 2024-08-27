@@ -1,100 +1,106 @@
-import React, { useState } from 'react';
-// Importa React y el hook useState.
-import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity } from 'react-native';
-// Importa componentes de React Native.
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { useState } from 'react';
+import * as Constantes from '../utils/constantes';
+import Constants from 'expo-constants';
+// Import de componentes personalizados
+import Input from '../components/inputs/input';
+import Buttons from '../components/Buttons/buttoon';
+import InputEmail from '../components/inputs/input_email';
 
-const PasswordRecoveryForm = ({ navigation }) => {
-    // Define el componente PasswordRecoveryForm que recibe navigation como prop.
+export default function RecuperarContrasena({ navigation }) {
+    const ip = Constantes.IP;
+
     const [email, setEmail] = useState('');
-    // Estado para almacenar el correo electrónico.
+    const [token, setToken] = useState('');
+    const [nuevaClave, setNuevaClave] = useState('');
 
-    const handleSubmit = () => {
-        console.log('Correo electrónico enviado:', email);
-        // Lógica para enviar el correo electrónico de recuperación de contraseña.
+    const handleResetPassword = async () => {
+        if (!email.trim()) {
+            Alert.alert("Debes ingresar un correo electrónico");
+            return;
+        }
+        if (!token.trim() || !nuevaClave.trim()) {
+            Alert.alert("Debes llenar todos los campos");
+            return;
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append('correo_cliente', email);
+            formData.append('token', token);
+            formData.append('contra_cliente', nuevaClave);
+            const response = await fetch(`${ip}/tienda/api/servicios/publico/cliente.php?action=recovery`, {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            if (data.status) {
+                Alert.alert(
+                    'Contraseña actualizada correctamente',
+                    '',
+                    [
+                        {
+                            text: 'OK',
+                            onPress: () => navigation.navigate('Inicio'),
+                        },
+                    ]
+                );
+            } else {
+                Alert.alert('Error', data.error);
+            }
+        } catch (error) {
+            Alert.alert('Ocurrió un error al intentar actualizar la contraseña');
+        }
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Recuperación de contraseña</Text>
-            {/* Título de la pantalla */}
+            <ScrollView contentContainerStyle={styles.scrollViewStyle}>
+                <Text style={styles.texto}>Recuperar Contraseña</Text>
 
-            <Text style={styles.instructions}>
-                Ingresa el correo electrónico asociado a tu cuenta y te enviaremos un enlace
-                para restablecer tu contraseña.
-            </Text>
-            {/* Instrucciones para el usuario */}
+                <InputEmail
+                    placeHolder='Correo Electrónico'
+                    setValor={email}
+                    setTextChange={setEmail}
+                />
 
-            <TextInput
-                style={styles.input}
-                placeholder="Correo electrónico"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                onChangeText={(text) => setEmail(text)}
-            />
-            {/* Campo de entrada para el correo electrónico */}
+                <Input
+                    placeHolder='Ingrese el Token'
+                    setValor={token}
+                    setTextChange={setToken}
+                />
 
-            <TouchableOpacity onPress={() => navigation.navigate('Verificacion')}>
-                <Text>Enviar correo electrónico</Text>
-            </TouchableOpacity>
-            {/* Botón para enviar el correo electrónico */}
+                <Input
+                    placeHolder='Nueva Contraseña'
+                    setValor={nuevaClave}
+                    setTextChange={setNuevaClave}
+                    secureTextEntry={true} // para que el texto se muestre como puntos
+                />
 
-            <TouchableOpacity onPress={() => navigation.navigate('Inicio')}>
-                <Text style={styles.link}>Regresar al inicio de sesión</Text>
-            </TouchableOpacity>
-            {/* Enlace para regresar a la pantalla de inicio de sesión */}
+                <Buttons
+                    textoBoton='Actualizar Contraseña'
+                    accionBoton={handleResetPassword}
+                />
+            </ScrollView>
         </View>
     );
-};
+}
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#ECA876',
+        backgroundColor: '#778DA9',
+        paddingTop: Constants.statusBarHeight + 5,
+    },
+    scrollViewStyle: {
         alignItems: 'center',
-        justifyContent: 'center',
-        padding: 20,
+        justifyContent: 'center'
     },
-    // Estilo para el contenedor principal
-    logo: {
-        width: 150,
-        height: 150,
-        marginBottom: 20,
+    texto: {
+        color: '#322C2B',
+        fontWeight: '900',
+        fontSize: 20,
+        marginBottom: 20
     },
-    // Estilo para el logo (no se usa en este código, pero está definido)
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-    },
-    // Estilo para el título
-    instructions: {
-        textAlign: 'center',
-        marginBottom: 10,
-    },
-    // Estilo para las instrucciones
-    input: {
-        width: 300,
-        padding: 10,
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
-        marginBottom: 10,
-    },
-    // Estilo para el campo de entrada
-    button: {
-        backgroundColor: '#4CAF50',
-        color: 'white',
-        padding: 10,
-        borderRadius: 5,
-    },
-    // Estilo para el botón (no se usa en este código, pero está definido)
-    link: {
-        marginTop: 10,
-        textAlign: 'center',
-        color: '#0000FF',
-    },
-    // Estilo para el enlace
 });
-
-export default PasswordRecoveryForm;
-// Exporta el componente PasswordRecoveryForm.

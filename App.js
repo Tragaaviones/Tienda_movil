@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import Recuperacion from './src/screen/cambiar_contraseña';
+import RecuperarContrasena from './src/screen/recuperacion_contraseña.js';
 import Verificacion from './src/screen/verificacion_codigo';
 import cambiar_contraseña from './src/screen/cambiar_contraseña';
 import crear_cuenta from './src/screen/crear_cuenta';
@@ -19,7 +19,7 @@ export default function App() {
             <Stack.Navigator initialRouteName='Inicio' screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Inicio" component={Inicio} />
                 <Stack.Screen name="navigation" component={Navigation} />
-                <Stack.Screen name="Recuperacion" component={Recuperacion} />
+                <Stack.Screen name="Recovery" component={RecuperarContrasena} />
                 <Stack.Screen name="Verificacion" component={Verificacion} />
                 <Stack.Screen name="cambiar_contraseña" component={cambiar_contraseña} />
                 <Stack.Screen name="crear_cuenta" component={crear_cuenta} />

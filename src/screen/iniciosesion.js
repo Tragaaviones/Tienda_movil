@@ -106,6 +106,10 @@ export default function Inicio({ navigation }) {
     // Efecto para validar la sesión cuando se monta el componente
     useEffect(() => { validarSesion() }, []);
 
+    const irRecu = async () => {
+        navigation.navigate('Recovery');
+      };
+      
     // Renderizado del componente
     return (
         <View style={styles.container}>
@@ -137,6 +141,7 @@ export default function Inicio({ navigation }) {
 
             <TouchableOpacity onPress={() => navigation.navigate('crear_cuenta')}>
                 <Text style={styles.linkText}>Crea una nueva cuenta</Text>
+                <TouchableOpacity onPress={irRecu}><Text style={styles.textRegistrar}>¿Olvidastes tu contraseña?</Text></TouchableOpacity>
             </TouchableOpacity>
         </View>
     );
@@ -171,4 +176,9 @@ const styles = StyleSheet.create({
         height: 100,
         marginBottom: 20,
     },
+    textRegistrar: {
+        color: '#322C2B', fontWeight: '700',
+        fontSize: 18,
+        marginTop: 10
+      },
 });

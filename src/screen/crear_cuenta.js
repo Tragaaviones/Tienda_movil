@@ -63,7 +63,7 @@ export default function CreateAccountForm({ navigation }) {
             const data = await response.json();
             // Procesa la respuesta del servidor.
             if (data.status) {
-                Alert.alert('Datos Guardados correctamente');
+                Alert.alert('Guardado exitosamente', `${data.message}`);
                 // Muestra una alerta y navega a la pantalla de sesión si la respuesta es exitosa.
                 navigation.navigate('Inicio');
             } else {
