@@ -6,6 +6,8 @@ import Constants from 'expo-constants';
 import Input from '../components/inputs/input';
 import Buttons from '../components/Buttons/buttoon';
 import InputEmail from '../components/inputs/input_email';
+import InputPassword from '../components/inputs/input_password';
+import { Button } from 'react-native-elements';
 
 export default function RecuperarContrasena({ navigation }) {
     const ip = Constantes.IP;
@@ -13,6 +15,7 @@ export default function RecuperarContrasena({ navigation }) {
     const [email, setEmail] = useState('');
     const [token, setToken] = useState('');
     const [nuevaClave, setNuevaClave] = useState('');
+    const [isContra, setIsContra] = useState(true); // Estado para manejar la visibilidad de la contraseña
 
     const handleResetPassword = async () => {
         if (!email.trim()) {
@@ -69,13 +72,14 @@ export default function RecuperarContrasena({ navigation }) {
                     placeHolder='Ingrese el Token'
                     setValor={token}
                     setTextChange={setToken}
+                    contra={isContra}
                 />
 
                 <Input
                     placeHolder='Nueva Contraseña'
                     setValor={nuevaClave}
                     setTextChange={setNuevaClave}
-                    secureTextEntry={true} // para que el texto se muestre como puntos
+                    contra={isContra}
                 />
 
                 <Buttons
@@ -90,7 +94,7 @@ export default function RecuperarContrasena({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#778DA9',
+        backgroundColor: '#fff',
         paddingTop: Constants.statusBarHeight + 5,
     },
     scrollViewStyle: {

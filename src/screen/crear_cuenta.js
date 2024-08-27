@@ -63,7 +63,7 @@ export default function CreateAccountForm({ navigation }) {
             const data = await response.json();
             // Procesa la respuesta del servidor.
             if (data.status) {
-                Alert.alert('Guardado exitosamente', `${data.message}`);
+                Alert.alert('Guardado exitosamente, guarda tu token para cambiar tu contraseña', `${data.message}`);
                 // Muestra una alerta y navega a la pantalla de sesión si la respuesta es exitosa.
                 navigation.navigate('Inicio');
             } else {
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     // Definición de estilos para el componente.
     container: {
         flex: 1,
-        backgroundColor: '#ECA876',
+        backgroundColor: '#328FE1',
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,

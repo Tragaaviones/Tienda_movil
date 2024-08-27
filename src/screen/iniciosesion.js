@@ -133,10 +133,6 @@ export default function Inicio({ navigation }) {
                 <Text style={styles.linkText}>Iniciar sesión</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => navigation.navigate('Recuperacion')}>
-                <Text style={styles.link}>¿Olvidaste la contraseña?</Text>
-            </TouchableOpacity>
-
             <Text style={styles.link}>¿No tienes cuenta?</Text>
 
             <TouchableOpacity onPress={() => navigation.navigate('crear_cuenta')}>
